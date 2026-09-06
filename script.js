@@ -149,11 +149,16 @@ document.querySelectorAll(".acc-btn").forEach((btn) => {
   });
 });
 
-/* Vault answers — from real chats */
+/* Flip polaroids */
+document.querySelectorAll(".flip-card").forEach((card) => {
+  card.addEventListener("click", () => card.classList.toggle("flipped"));
+});
+
+/* Vault answers — simple & logical */
 const ANSWERS = [
-  (v) => /tik\s*tok|tt|tiktok/.test(v),
-  (v) => v === "3" || /three/.test(v),
-  (v) => /sleeping\s*beauty|sleepingbeauty/.test(v),
+  (v) => /online|tik\s*tok|tiktok|internet|app/.test(v),
+  (v) => /salmane|salman|salmanee/.test(v),
+  (v) => /yes|yep|yeah|oui|ah|b3id|far|distance|long/.test(v),
   (v) => v === "27" || /twenty\s*seven/.test(v),
 ];
 
