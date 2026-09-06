@@ -232,6 +232,13 @@ function openHub() {
   hero.hidden = true;
   hub.hidden = false;
   window.scrollTo({ top: 0, behavior: "instant" });
+  const cue = document.getElementById("scrollCue");
+  const hideCue = () => {
+    if (!cue || window.scrollY < 40) return;
+    cue.classList.add("hidden");
+    window.removeEventListener("scroll", hideCue);
+  };
+  window.addEventListener("scroll", hideCue, { passive: true });
 }
 
 blowBtn.addEventListener("click", () => {
