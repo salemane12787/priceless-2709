@@ -511,6 +511,15 @@ body {
   color: #9f4a42;
 }
 
+.sign-note {
+  margin-top: 0.35em !important;
+  font-family: Nunito, system-ui, sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  color: #8a6f68;
+  font-style: italic;
+}
+
 .foot {
   text-align: center;
   padding: 40px 0 20px;
