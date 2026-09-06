@@ -232,13 +232,19 @@ function openHub() {
   hero.hidden = true;
   hub.hidden = false;
   window.scrollTo({ top: 0, behavior: "instant" });
-  const cue = document.getElementById("scrollCue");
-  const hideCue = () => {
-    if (!cue || window.scrollY < 40) return;
-    cue.classList.add("hidden");
-    window.removeEventListener("scroll", hideCue);
+
+  const hint = document.getElementById("scrollHint");
+  const finale = document.getElementById("finale");
+  if (hint) hint.hidden = false;
+
+  const updateHint = () => {
+    if (!hint || !finale) return;
+    const rect = finale.getBoundingClientRect();
+    const nearLetter = rect.top < window.innerHeight * 0.75;
+    hint.hidden = nearLetter;
+    if (nearLetter) window.removeEventListener("scroll", updateHint);
   };
-  window.addEventListener("scroll", hideCue, { passive: true });
+  window.addEventListener("scroll", updateHint, { passive: true });
 }
 
 blowBtn.addEventListener("click", () => {

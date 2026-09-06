@@ -229,7 +229,7 @@ body {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  animation: scrollBounce 1.6s ease-in-out infinite;
+  animation: cueBounce 1.6s ease-in-out infinite;
 }
 
 .scroll-cue.hidden {
@@ -239,9 +239,41 @@ body {
   transition: opacity 0.35s ease;
 }
 
-@keyframes scrollBounce {
+/* Fixed bottom cue — stays on screen until the letter */
+.scroll-hint {
+  position: fixed;
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: var(--coral);
+  color: #2a1814;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  animation: hintBounce 1.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.scroll-hint[hidden] {
+  display: none !important;
+}
+
+@keyframes cueBounce {
   0%, 100% { transform: translateY(0); opacity: 1; }
   50% { transform: translateY(8px); opacity: 0.7; }
+}
+
+@keyframes hintBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(7px); }
 }
 
 .section {
