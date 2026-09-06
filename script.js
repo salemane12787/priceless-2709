@@ -20,49 +20,77 @@ function ensureAudio() {
 }
 
 const NOTE = {
-  C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23,
-  G4: 392.0, A4: 440.0, Bb4: 466.16, C5: 523.25,
+  F3: 174.61, A3: 220.0, Bb3: 233.08, C4: 261.63, D4: 293.66,
+  E4: 329.63, F4: 349.23, G4: 392.0, A4: 440.0, Bb4: 466.16, C5: 523.25,
 };
 
-/** Happy Birthday — soft music-box style, loops */
+/**
+ * Happy Birthday — warmer arrangement:
+ * melody + soft harmony + gentle bass, with light sparkle.
+ * Each entry: [melodyHz, durationBeats, harmonyHz|null, bassHz|null]
+ */
+const BEAT = 0.38;
 const BIRTHDAY_SONG = [
-  [NOTE.C4, 0.35], [NOTE.C4, 0.35], [NOTE.D4, 0.7], [NOTE.C4, 0.7], [NOTE.F4, 0.7], [NOTE.E4, 1.2],
-  [NOTE.C4, 0.35], [NOTE.C4, 0.35], [NOTE.D4, 0.7], [NOTE.C4, 0.7], [NOTE.G4, 0.7], [NOTE.F4, 1.2],
-  [NOTE.C4, 0.35], [NOTE.C4, 0.35], [NOTE.C5, 0.7], [NOTE.A4, 0.7], [NOTE.F4, 0.7], [NOTE.E4, 0.7], [NOTE.D4, 1.2],
-  [NOTE.Bb4, 0.35], [NOTE.Bb4, 0.35], [NOTE.A4, 0.7], [NOTE.F4, 0.7], [NOTE.G4, 0.7], [NOTE.F4, 1.6],
+  [NOTE.C4, 0.75, NOTE.A3, NOTE.F3], [NOTE.C4, 0.25, null, null],
+  [NOTE.D4, 1, NOTE.Bb3, null], [NOTE.C4, 1, NOTE.A3, null],
+  [NOTE.F4, 1, NOTE.C4, null], [NOTE.E4, 2, NOTE.C4, NOTE.C4],
+
+  [NOTE.C4, 0.75, NOTE.A3, NOTE.F3], [NOTE.C4, 0.25, null, null],
+  [NOTE.D4, 1, NOTE.Bb3, null], [NOTE.C4, 1, NOTE.A3, null],
+  [NOTE.G4, 1, NOTE.E4, null], [NOTE.F4, 2, NOTE.C4, NOTE.F3],
+
+  [NOTE.C4, 0.75, NOTE.A3, NOTE.F3], [NOTE.C4, 0.25, null, null],
+  [NOTE.C5, 1, NOTE.F4, null], [NOTE.A4, 1, NOTE.F4, null],
+  [NOTE.F4, 1, NOTE.C4, null], [NOTE.E4, 1, NOTE.C4, null], [NOTE.D4, 2, NOTE.Bb3, NOTE.Bb3],
+
+  [NOTE.Bb4, 0.75, NOTE.F4, NOTE.F3], [NOTE.Bb4, 0.25, null, null],
+  [NOTE.A4, 1, NOTE.F4, null], [NOTE.F4, 1, NOTE.C4, null],
+  [NOTE.G4, 1, NOTE.E4, null], [NOTE.F4, 2.5, NOTE.C4, NOTE.F3],
 ];
 
-function playTone(ctx, dest, freq, start, dur) {
+function playVoice(ctx, dest, freq, start, dur, type, peak, harm = 0) {
+  if (!freq) return;
   const osc = ctx.createOscillator();
-  const osc2 = ctx.createOscillator();
   const gain = ctx.createGain();
-  osc.type = "triangle";
-  osc2.type = "sine";
+  osc.type = type;
   osc.frequency.value = freq;
-  osc2.frequency.value = freq * 2;
+  const attack = Math.min(0.04, dur * 0.12);
+  const release = Math.min(0.22, dur * 0.35);
   gain.gain.setValueAtTime(0.0001, start);
-  gain.gain.exponentialRampToValueAtTime(0.18, start + 0.03);
-  gain.gain.exponentialRampToValueAtTime(0.08, start + dur * 0.45);
-  gain.gain.exponentialRampToValueAtTime(0.0001, start + dur);
-  const mix = ctx.createGain();
-  mix.gain.value = 0.55;
-  const mix2 = ctx.createGain();
-  mix2.gain.value = 0.12;
-  osc.connect(mix);
-  osc2.connect(mix2);
-  mix.connect(gain);
-  mix2.connect(gain);
+  gain.gain.exponentialRampToValueAtTime(peak, start + attack);
+  gain.gain.exponentialRampToValueAtTime(peak * 0.55, start + dur * 0.5);
+  gain.gain.exponentialRampToValueAtTime(0.0001, start + dur - 0.001);
+  osc.connect(gain);
   gain.connect(dest);
   osc.start(start);
-  osc2.start(start);
-  osc.stop(start + dur + 0.05);
-  osc2.stop(start + dur + 0.05);
+  osc.stop(start + dur + 0.02);
+
+  if (harm > 0) {
+    const o2 = ctx.createOscillator();
+    const g2 = ctx.createGain();
+    o2.type = "sine";
+    o2.frequency.value = freq * 2;
+    g2.gain.setValueAtTime(0.0001, start);
+    g2.gain.exponentialRampToValueAtTime(peak * harm, start + attack);
+    g2.gain.exponentialRampToValueAtTime(0.0001, start + dur * 0.85);
+    o2.connect(g2);
+    g2.connect(dest);
+    o2.start(start);
+    o2.stop(start + dur + 0.02);
+  }
 }
 
-function scheduleBirthday(ctx, master, when) {
+function scheduleBirthday(ctx, bus, when) {
   let t = when;
-  BIRTHDAY_SONG.forEach(([freq, dur]) => {
-    playTone(ctx, master, freq, t, dur * 0.92);
+  BIRTHDAY_SONG.forEach(([mel, beats, harm, bass]) => {
+    const dur = beats * BEAT;
+    const noteLen = dur * 0.9;
+    playVoice(ctx, bus, mel, t, noteLen, "triangle", 0.22, 0.28);
+    playVoice(ctx, bus, mel, t, noteLen * 0.95, "sine", 0.1, 0);
+    if (harm) playVoice(ctx, bus, harm, t, noteLen * 1.05, "sine", 0.07, 0);
+    if (bass) playVoice(ctx, bus, bass, t, noteLen * 1.15, "sine", 0.11, 0);
+    // tiny high sparkle on longer notes
+    if (beats >= 1) playVoice(ctx, bus, mel * 3, t + 0.02, noteLen * 0.35, "sine", 0.025, 0);
     t += dur;
   });
   return t - when;
@@ -73,29 +101,61 @@ function startMusic() {
   if (musicNodes) return;
 
   const master = ctx.createGain();
-  master.gain.value = 0.55;
+  master.gain.value = 0.0001;
+  master.gain.exponentialRampToValueAtTime(0.7, ctx.currentTime + 0.4);
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = "lowpass";
+  filter.frequency.value = 2800;
+  filter.Q.value = 0.7;
+
+  // Soft room echo
+  const delay = ctx.createDelay(1.0);
+  delay.delayTime.value = 0.22;
+  const delayGain = ctx.createGain();
+  delayGain.gain.value = 0.22;
+  const feedback = ctx.createGain();
+  feedback.gain.value = 0.28;
+
+  const bus = ctx.createGain();
+  bus.gain.value = 1;
+  bus.connect(filter);
+  filter.connect(master);
+  filter.connect(delay);
+  delay.connect(delayGain);
+  delayGain.connect(master);
+  delay.connect(feedback);
+  feedback.connect(delay);
   master.connect(ctx.destination);
 
-  // Soft warm pad under the melody
+  // Warm moving pad (F major-ish)
   const padGain = ctx.createGain();
-  padGain.gain.value = 0.035;
-  padGain.connect(master);
-  const padOscs = [174.61, 220, 261.63].map((f) => {
+  padGain.gain.value = 0.028;
+  padGain.connect(filter);
+  const padOscs = [NOTE.F3, NOTE.A3, NOTE.C4, NOTE.F4].map((f, i) => {
     const o = ctx.createOscillator();
     o.type = "sine";
     o.frequency.value = f;
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+    lfo.frequency.value = 0.12 + i * 0.03;
+    lfoGain.gain.value = 2.5;
+    lfo.connect(lfoGain);
+    lfoGain.connect(o.frequency);
     o.connect(padGain);
     o.start();
-    return o;
+    lfo.start();
+    return { o, lfo };
   });
 
-  const loopMs = scheduleBirthday(ctx, master, ctx.currentTime + 0.15) * 1000 + 600;
+  const songLen = scheduleBirthday(ctx, bus, ctx.currentTime + 0.2);
+  const loopMs = songLen * 1000 + 900;
   musicTimer = window.setInterval(() => {
-    if (!musicOn || !audioCtx) return;
-    scheduleBirthday(audioCtx, master, audioCtx.currentTime + 0.05);
+    if (!musicOn || !audioCtx || !musicNodes) return;
+    scheduleBirthday(audioCtx, musicNodes.bus, audioCtx.currentTime + 0.08);
   }, loopMs);
 
-  musicNodes = { master, padOscs, padGain };
+  musicNodes = { master, padOscs, padGain, bus, delay, feedback };
   musicOn = true;
   muteBtn.hidden = false;
   muteBtn.textContent = "Mute music";
@@ -111,11 +171,14 @@ function stopMusic() {
     muteBtn.textContent = "Play music";
     return;
   }
-  musicNodes.padOscs.forEach((o) => {
+  musicNodes.padOscs.forEach(({ o, lfo }) => {
     try { o.stop(); } catch (_) {}
+    try { lfo.stop(); } catch (_) {}
   });
   try {
-    musicNodes.master.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+    musicNodes.master.gain.cancelScheduledValues(audioCtx.currentTime);
+    musicNodes.master.gain.setValueAtTime(Math.max(musicNodes.master.gain.value, 0.001), audioCtx.currentTime);
+    musicNodes.master.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.35);
   } catch (_) {}
   musicNodes = null;
   musicOn = false;
