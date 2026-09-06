@@ -154,24 +154,47 @@ document.querySelectorAll(".flip-card").forEach((card) => {
   card.addEventListener("click", () => card.classList.toggle("flipped"));
 });
 
+function normalize(s) {
+  return (s || "")
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 /* Vault answers — simple & logical */
 const ANSWERS = [
-  (v) => /online|tik\s*tok|tiktok|internet|app/.test(v),
-  (v) => /salmane|salman|salmanee/.test(v),
-  (v) => /yes|yep|yeah|oui|ah|b3id|far|distance|long/.test(v),
-  (v) => v === "27" || /twenty\s*seven/.test(v),
+  (v) => {
+    const t = normalize(v);
+    return t.includes("online") || t.includes("tiktok") || t.includes("internet") || t === "app";
+  },
+  (v) => {
+    const t = normalize(v);
+    return t.includes("salmane") || t.includes("salman");
+  },
+  (v) => {
+    const t = normalize(v);
+    return t === "yes" || t === "y" || t.includes("yeah") || t.includes("yep") || t.includes("oui") || t.includes("distance") || t.includes("far");
+  },
+  (v) => {
+    const t = normalize(v);
+    return t === "27" || t.includes("twenty seven") || t.includes("twentyseven");
+  },
 ];
 
 document.querySelectorAll(".vault-card").forEach((card) => {
-  const idx = Number(card.dataset.vault);
+  const idx = Number(card.getAttribute("data-vault"));
   const input = card.querySelector("input");
   const btn = card.querySelector(".unlock-btn");
   const err = card.querySelector(".vault-err");
   const locked = card.querySelector(".vault-locked");
   const open = card.querySelector(".vault-open");
 
-  function tryUnlock() {
-    const val = (input.value || "").trim().toLowerCase();
+  function tryUnlock(e) {
+    if (e) e.preventDefault();
+    const val = normalize(input.value);
     if (ANSWERS[idx](val)) {
       err.hidden = true;
       locked.hidden = true;
@@ -188,7 +211,7 @@ document.querySelectorAll(".vault-card").forEach((card) => {
 
   btn.addEventListener("click", tryUnlock);
   input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") tryUnlock();
+    if (e.key === "Enter") tryUnlock(e);
   });
 });
 
