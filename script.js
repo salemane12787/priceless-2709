@@ -8,6 +8,7 @@ const heroHint = document.getElementById("heroHint");
 let audioCtx = null;
 let musicNodes = null;
 let musicOn = false;
+let musicTimer = null;
 
 function ensureAudio() {
   if (!audioCtx) {
@@ -18,48 +19,104 @@ function ensureAudio() {
   return audioCtx;
 }
 
-/** Soft looping pad — no external file needed */
+const NOTE = {
+  C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23,
+  G4: 392.0, A4: 440.0, Bb4: 466.16, C5: 523.25,
+};
+
+/** Happy Birthday — soft music-box style, loops */
+const BIRTHDAY_SONG = [
+  [NOTE.C4, 0.35], [NOTE.C4, 0.35], [NOTE.D4, 0.7], [NOTE.C4, 0.7], [NOTE.F4, 0.7], [NOTE.E4, 1.2],
+  [NOTE.C4, 0.35], [NOTE.C4, 0.35], [NOTE.D4, 0.7], [NOTE.C4, 0.7], [NOTE.G4, 0.7], [NOTE.F4, 1.2],
+  [NOTE.C4, 0.35], [NOTE.C4, 0.35], [NOTE.C5, 0.7], [NOTE.A4, 0.7], [NOTE.F4, 0.7], [NOTE.E4, 0.7], [NOTE.D4, 1.2],
+  [NOTE.Bb4, 0.35], [NOTE.Bb4, 0.35], [NOTE.A4, 0.7], [NOTE.F4, 0.7], [NOTE.G4, 0.7], [NOTE.F4, 1.6],
+];
+
+function playTone(ctx, dest, freq, start, dur) {
+  const osc = ctx.createOscillator();
+  const osc2 = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = "triangle";
+  osc2.type = "sine";
+  osc.frequency.value = freq;
+  osc2.frequency.value = freq * 2;
+  gain.gain.setValueAtTime(0.0001, start);
+  gain.gain.exponentialRampToValueAtTime(0.18, start + 0.03);
+  gain.gain.exponentialRampToValueAtTime(0.08, start + dur * 0.45);
+  gain.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+  const mix = ctx.createGain();
+  mix.gain.value = 0.55;
+  const mix2 = ctx.createGain();
+  mix2.gain.value = 0.12;
+  osc.connect(mix);
+  osc2.connect(mix2);
+  mix.connect(gain);
+  mix2.connect(gain);
+  gain.connect(dest);
+  osc.start(start);
+  osc2.start(start);
+  osc.stop(start + dur + 0.05);
+  osc2.stop(start + dur + 0.05);
+}
+
+function scheduleBirthday(ctx, master, when) {
+  let t = when;
+  BIRTHDAY_SONG.forEach(([freq, dur]) => {
+    playTone(ctx, master, freq, t, dur * 0.92);
+    t += dur;
+  });
+  return t - when;
+}
+
 function startMusic() {
   const ctx = ensureAudio();
   if (musicNodes) return;
 
   const master = ctx.createGain();
-  master.gain.value = 0.04;
+  master.gain.value = 0.55;
   master.connect(ctx.destination);
 
-  const freqs = [196, 246.94, 293.66, 392];
-  const oscs = freqs.map((f, i) => {
+  // Soft warm pad under the melody
+  const padGain = ctx.createGain();
+  padGain.gain.value = 0.035;
+  padGain.connect(master);
+  const padOscs = [174.61, 220, 261.63].map((f) => {
     const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    o.type = i % 2 ? "sine" : "triangle";
+    o.type = "sine";
     o.frequency.value = f;
-    g.gain.value = 0.2;
-    o.connect(g);
-    g.connect(master);
+    o.connect(padGain);
     o.start();
-    return { o, g };
+    return o;
   });
 
-  const lfo = ctx.createOscillator();
-  const lfoGain = ctx.createGain();
-  lfo.frequency.value = 0.08;
-  lfoGain.gain.value = 0.015;
-  lfo.connect(lfoGain);
-  lfoGain.connect(master.gain);
-  lfo.start();
+  const loopMs = scheduleBirthday(ctx, master, ctx.currentTime + 0.15) * 1000 + 600;
+  musicTimer = window.setInterval(() => {
+    if (!musicOn || !audioCtx) return;
+    scheduleBirthday(audioCtx, master, audioCtx.currentTime + 0.05);
+  }, loopMs);
 
-  musicNodes = { master, oscs, lfo, lfoGain };
+  musicNodes = { master, padOscs, padGain };
   musicOn = true;
   muteBtn.hidden = false;
   muteBtn.textContent = "Mute music";
 }
 
 function stopMusic() {
-  if (!musicNodes || !audioCtx) return;
-  musicNodes.oscs.forEach(({ o }) => {
+  if (musicTimer) {
+    clearInterval(musicTimer);
+    musicTimer = null;
+  }
+  if (!musicNodes || !audioCtx) {
+    musicOn = false;
+    muteBtn.textContent = "Play music";
+    return;
+  }
+  musicNodes.padOscs.forEach((o) => {
     try { o.stop(); } catch (_) {}
   });
-  try { musicNodes.lfo.stop(); } catch (_) {}
+  try {
+    musicNodes.master.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+  } catch (_) {}
   musicNodes = null;
   musicOn = false;
   muteBtn.textContent = "Play music";
