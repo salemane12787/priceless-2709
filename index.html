@@ -3,258 +3,286 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0b141a" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>For Firdaous · 27.09</title>
+  <meta name="theme-color" content="#1a1520" />
+  <title>Firdaous · Birthday Hub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎂</text></svg>" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div id="particles-js" aria-hidden="true"></div>
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
 
-  <!-- LOCK SCREEN -->
-  <section class="lock" id="lock">
-    <div class="lock-glow" aria-hidden="true"></div>
-    <p class="lock-kicker animate__animated animate__fadeIn">No box · No address · No price</p>
-    <p class="lock-date animate__animated animate__fadeIn animate__delay-1s">27 · 09 · 2026</p>
-    <h1 class="lock-name animate__animated animate__fadeInUp animate__delay-1s">Firdaous</h1>
-    <p class="lock-sub animate__animated animate__fadeIn animate__delay-2s">Your year. One chat.</p>
-    <button class="open-chat animate__animated animate__pulse animate__infinite" id="openChat" type="button">
-      <span class="open-chat-dot"></span>
-      Open chat
+  <!-- 1. LANDING -->
+  <section class="hero" id="hero">
+    <p class="eyebrow animate__animated animate__fadeIn">27 · 09 · 2026</p>
+    <h1 class="animate__animated animate__fadeInUp">Welcome to<br /><span>Firdaous</span>’s<br />Birthday Hub</h1>
+    <p class="hero-sub animate__animated animate__fadeIn animate__delay-1s">No box. No address. No price. Just us.</p>
+
+    <div class="cake-wrap animate__animated animate__fadeInUp animate__delay-1s" id="cakeWrap">
+      <div class="cake" id="cake" aria-hidden="true">
+        <div class="candle c1"><i class="flame"></i></div>
+        <div class="candle c2"><i class="flame"></i></div>
+        <div class="candle c3"><i class="flame"></i></div>
+        <div class="frost"></div>
+        <div class="layer"></div>
+      </div>
+    </div>
+
+    <button type="button" class="blow-btn animate__animated animate__pulse animate__infinite" id="blowBtn">
+      Blow out the candles
     </button>
-    <p class="lock-hint">tap to open</p>
+    <p class="hint" id="heroHint">then the year opens</p>
   </section>
 
-  <!-- CHAT APP -->
-  <div class="phone" id="phone" hidden>
-    <header class="chat-bar">
-      <div class="avatar">🌸</div>
-      <div class="chat-meta">
-        <p class="chat-name">Firdaous</p>
-        <p class="chat-status" id="chatStatus">online</p>
-      </div>
-    </header>
+  <main id="hub" class="hub" hidden>
+    <nav class="toc">
+      <a href="#memories">Memories</a>
+      <a href="#journey">Journey</a>
+      <a href="#reasons">Reasons</a>
+      <a href="#vault">Open When</a>
+      <a href="#finale">Letter</a>
+    </nav>
 
-    <main class="chat" id="chat">
+    <!-- 2. MEMORY MATRIX -->
+    <section class="section" id="memories">
+      <p class="section-kicker">Memory matrix</p>
+      <h2>Moments only we have</h2>
+      <p class="section-lead">Tap a card. Real dates. Real words.</p>
+      <div class="polaroids">
+        <article class="polaroid r1">
+          <div class="photo p-tiktok">
+            <span>29 Oct 2025</span>
+            <strong>TikTok</strong>
+          </div>
+          <p class="caption">You were at dinner. Then: <em>M firdaous</em>. Nice to meet you.</p>
+        </article>
+        <article class="polaroid r2">
+          <div class="photo p-joke">
+            <span>that night</span>
+            <strong>1 + 1 = ?</strong>
+          </div>
+          <p class="caption">You said 2. I said 3 — because the + counts. You almost blocked me in your head.</p>
+        </article>
+        <article class="polaroid r3">
+          <div class="photo p-sleep">
+            <span>30 Oct 2025</span>
+            <strong>Sleeping beauty</strong>
+          </div>
+          <p class="caption">Your grandma’s name for you. You sleep anywhere if you feel safe.</p>
+        </article>
+        <article class="polaroid r1">
+          <div class="photo p-name">
+            <span>15 Nov 2025</span>
+            <strong>Priceless</strong>
+          </div>
+          <p class="caption">I didn’t buy a gift. I saved you as <em>my priceless little princess</em>.</p>
+        </article>
+        <article class="polaroid r2">
+          <div class="photo p-stay">
+            <span>16 Nov 2025</span>
+            <strong>Still here</strong>
+          </div>
+          <p class="caption">You wrote: <em>M not going anywhere</em>. I kept that.</p>
+        </article>
+        <article class="polaroid r3">
+          <div class="photo p-salam">
+            <span>2 Dec 2025</span>
+            <strong>WhatsApp</strong>
+          </div>
+          <p class="caption"><em>Khoya gol 3a slm</em> — and a whole winter of goodnights started.</p>
+        </article>
+      </div>
+    </section>
 
-      <!-- BEFORE YOU -->
-      <div class="day-chip">Before October 2025</div>
-      <div class="system">A year that started without me</div>
+    <!-- 3. JOURNEY TIMELINE -->
+    <section class="section" id="journey">
+      <p class="section-kicker">The journey</p>
+      <h2>Your year with me in it</h2>
+      <div class="timeline">
+        <div class="tl-item">
+          <span class="tl-date">Before Oct 2025</span>
+          <h3>Before me</h3>
+          <p>Bac. Eco because you wanted it. Eldest. Casa. A name I barely hear. You hadn’t met me yet.</p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">29 Oct 2025</span>
+          <h3>The random start</h3>
+          <p>TikTok. Dinner. Names. Timetable tears. First <em>sweet dreams lil girl</em>.</p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">Oct → Nov</span>
+          <h3>WhatsApp · Instagram</h3>
+          <p>School mornings. Maths stress. Whereee rrr uuu. Priceless nickname. I’m not going anywhere.</p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">Dec 2025</span>
+          <h3>Showing up</h3>
+          <p>You were sick. I still said goodnight. Drink water. Rest. Be safe.</p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">1 Jan 2026</span>
+          <h3>First of the year</h3>
+          <p>I scheduled happy new year so I’d be first. You were the best part of 2025.</p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">14 Jan 2026</span>
+          <h3>Only one</h3>
+          <p><em>Kayna ghir Firdaous w7daaa.</em></p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">22 Feb 2026</span>
+          <h3>You remembered mine</h3>
+          <p>You said happy birthday. That night I said priceless princess again.</p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">Aug 2026</span>
+          <h3>Distance</h3>
+          <p>Casa and the other end of Morocco. <em>Netela9aw Fe 9elebi.</em> New number — still Firdaous.</p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">6 Sep 2026</span>
+          <h3>You told me</h3>
+          <p><em>Ana 27sept.</em> So I made this.</p>
+        </div>
+        <div class="tl-item tl-now">
+          <span class="tl-date">27 Sep 2026</span>
+          <h3>Today</h3>
+          <p>Your birthday. I’m still here.</p>
+        </div>
+      </div>
+    </section>
 
-      <div class="bubble them reveal">
-        <p>Bac this year. Eco — because she wanted it, not because anyone said she was dumb.</p>
-        <span class="time">before</span>
-      </div>
-      <div class="bubble them reveal">
-        <p>Eldest. Casa. Sleeping beauty — she can sleep anywhere if she feels safe.</p>
-        <span class="time">before</span>
-      </div>
-      <div class="bubble them reveal">
-        <p>Firdaous. A name you barely hear. She had not met you yet.</p>
-        <span class="time">before</span>
-      </div>
+    <!-- 4. REASONS ACCORDION -->
+    <section class="section" id="reasons">
+      <p class="section-kicker">Accordion</p>
+      <h2>Reasons you’re priceless</h2>
+      <p class="section-lead">Click each one.</p>
+      <div class="accordion" id="accordion">
+        <button type="button" class="acc-btn">How rare your name feels to me<span>+</span></button>
+        <div class="acc-panel">I told you the first night — I don’t hear Firdaous a lot. You said you barely meet girls with the same name. Kayna ghir Firdaous wehda.</div>
 
-      <!-- NIGHT ONE -->
-      <div class="day-chip">29 Oct 2025 · TikTok</div>
-      <div class="app-chip">TikTok</div>
-      <div class="system">The night she met you</div>
+        <button type="button" class="acc-btn">You’re sleeping beauty for a reason<span>+</span></button>
+        <div class="acc-panel">You can sleep anywhere if you feel safe. I kept saying goodnight even when you were already gone.</div>
 
-      <div class="bubble them reveal">
-        <p>Hiii sorry i didnt see ur msg i got go to take my dinner</p>
-        <span class="time">19:36</span>
-      </div>
-      <div class="bubble me reveal">
-        <p>Npr · Take ur time</p>
-        <span class="time">19:36</span>
-      </div>
-      <div class="bubble me reveal">
-        <p>My name is salmane btw</p>
-        <span class="time">20:04</span>
-      </div>
-      <div class="bubble them reveal">
-        <p>M firdaous</p>
-        <span class="time">20:04</span>
-      </div>
-      <div class="bubble them reveal">
-        <p>Nice to meet u salmane</p>
-        <span class="time">20:04</span>
-      </div>
-      <div class="bubble me reveal">
-        <p>I loved the name i dont hear it a lot here</p>
-        <span class="time">20:04</span>
-      </div>
-      <div class="bubble them reveal">
-        <p>Yea I barely meet girls w the same name</p>
-        <span class="time">20:04</span>
-      </div>
-      <div class="bubble me reveal">
-        <p>Okay sooooooooo wht is 1+1</p>
-        <span class="time">later</span>
-      </div>
-      <div class="bubble them reveal">
-        <p>It's 2</p>
-        <span class="time">later</span>
-      </div>
-      <div class="bubble me reveal">
-        <p>Wrong. It 3 prove me wrong · the + counts too</p>
-        <span class="time">later</span>
-      </div>
-      <div class="bubble me reveal">
-        <p>Have a sweet dreams lil girl</p>
-        <span class="time">night</span>
-      </div>
-      <div class="bubble them reveal">
-        <p>Owww That's cute · Tnxx</p>
-        <span class="time">night</span>
-      </div>
+        <button type="button" class="acc-btn">You chose Eco because you wanted it<span>+</span></button>
+        <div class="acc-panel">Not because anyone called you dumb. You said that on night one. I never forgot.</div>
 
-      <!-- OCT 30 -->
-      <div class="day-chip">30 Oct 2025</div>
-      <div class="app-chip">WhatsApp</div>
-      <div class="bubble them reveal">
-        <p>Good morning · Am going to school now</p>
-        <span class="time">06:20</span>
-      </div>
-      <div class="bubble them reveal">
-        <p>My grandma calls me sleeping beauty</p>
-        <span class="time">evening</span>
-      </div>
-      <div class="bubble me reveal">
-        <p>Sleep well sleeping beauty</p>
-        <span class="time">22:16</span>
-      </div>
+        <button type="button" class="acc-btn">Your terrible / beautiful sleep schedule<span>+</span></button>
+        <div class="acc-panel">Night and day mixed. Exams at 8am. Still answering me. Still sending stickers.</div>
 
-      <!-- OCT 31 -->
-      <div class="day-chip">31 Oct 2025</div>
-      <div class="app-chip">Instagram</div>
-      <div class="bubble them reveal">
-        <p>I get back my inst</p>
-        <span class="time">11:19</span>
-      </div>
-      <div class="bubble me reveal">
-        <p>Good morning sweet girl</p>
-        <span class="time">10:30</span>
-      </div>
+        <button type="button" class="acc-btn">You laugh at my dumb jokes<span>+</span></button>
+        <div class="acc-panel">1+1=3. Shoe can drive. You say naari ghandrbk and stay.</div>
 
-      <!-- NOV -->
-      <div class="day-chip">November 2025</div>
-      <div class="bubble me reveal">
-        <p>Wheeeerrrree rrrr uuuu</p>
-        <span class="time">11 Nov</span>
-      </div>
-      <div class="system">15 Nov · you didn't buy anything. you gave her a name.</div>
-      <div class="bubble me reveal special">
-        <p>my priceless little princess</p>
-        <span class="time">15 Nov</span>
-      </div>
-      <div class="bubble them reveal special">
-        <p>M not going anywhere 🙂</p>
-        <span class="time">16 Nov</span>
-      </div>
+        <button type="button" class="acc-btn">You get stressed and still try<span>+</span></button>
+        <div class="acc-panel">Maths isn’t your thing. You still wake up to revise. Baraka and neya.</div>
 
-      <!-- DEC -->
-      <div class="day-chip">2 Dec 2025 · WhatsApp</div>
-      <div class="app-chip">WhatsApp</div>
-      <div class="bubble them reveal">
-        <p>Khoya gol 3a slm 🙂</p>
-        <span class="time">21:40</span>
-      </div>
-      <div class="bubble me reveal">
-        <p>Aslam alayekom warahemato Allah ta3ala wabarakatoh</p>
-        <span class="time">21:41</span>
-      </div>
-      <div class="system">Early December · she was sick. you still said goodnight.</div>
-      <div class="bubble me reveal">
-        <p>good night lil kind girl i hope u be better tomorrow</p>
-        <span class="time">6 Dec</span>
-      </div>
-      <div class="bubble me reveal">
-        <p>Have a sweet dreams princess</p>
-        <span class="time">6 Dec</span>
-      </div>
+        <button type="button" class="acc-btn">You’re the eldest and you still care hard<span>+</span></button>
+        <div class="acc-panel">You organized your brother’s birthday when everyone forgot. That’s you.</div>
 
-      <!-- NEW YEAR -->
-      <div class="day-chip">1 Jan 2026</div>
-      <div class="system">You scheduled it so you'd be first</div>
-      <div class="bubble me reveal special">
-        <p>Happy new year sweetheart… you were the best part of 2025 and I cant wait to see you soon</p>
-        <span class="time">00:00</span>
-      </div>
+        <button type="button" class="acc-btn">You said you’re not going anywhere<span>+</span></button>
+        <div class="acc-panel">16 November. Four words. I kept them like a key.</div>
 
-      <!-- JAN -->
-      <div class="day-chip">14 Jan 2026</div>
-      <div class="bubble them reveal special">
-        <p>Kayna ghir Firdaous w7daaa</p>
-        <span class="time">20:16</span>
-      </div>
+        <button type="button" class="acc-btn">You wished me happy birthday first<span>+</span></button>
+        <div class="acc-panel">22 February. From Casa to me. I felt it.</div>
 
-      <!-- FEB -->
-      <div class="day-chip">22 Feb 2026</div>
-      <div class="system">Your birthday · she remembered</div>
-      <div class="bubble them reveal">
-        <p>Happy birthday 🫶</p>
-        <span class="time">00:23</span>
-      </div>
-      <div class="bubble me reveal special">
-        <p>have a sweet dreams my little priceless princess</p>
-        <span class="time">23:51</span>
-      </div>
+        <button type="button" class="acc-btn">Distance never made you fake<span>+</span></button>
+        <div class="acc-panel">Different cities. Same jokes. Same Firdaous when the number changed.</div>
 
-      <!-- SUMMER -->
-      <div class="day-chip">14 Aug 2026</div>
-      <div class="system">Distance · Casa and the other end of Morocco</div>
-      <div class="bubble them reveal">
-        <p>Nta rak flekher dyl mghrib😂 fin bghiti ntla9aw</p>
-        <span class="time">13:52</span>
-      </div>
-      <div class="bubble me reveal">
-        <p>Netela9aw Fe 9elebi</p>
-        <span class="time">20:21</span>
-      </div>
+        <button type="button" class="acc-btn">You make ordinary nights less empty<span>+</span></button>
+        <div class="acc-panel">Reels. Stickers. Helloooooooooo. Whereee rrr uuu.</div>
 
-      <div class="day-chip">16 Aug 2026</div>
-      <div class="bubble them reveal">
-        <p>Wa anaaa · Firdaous</p>
-        <span class="time">15:00</span>
+        <button type="button" class="acc-btn">You don’t have a price<span>+</span></button>
+        <div class="acc-panel">That’s why this hub has no box and no address. Only you.</div>
       </div>
-      <div class="bubble me reveal">
-        <p>Aaaaaaaaa le3eferitaaa bedeleti nemera</p>
-        <span class="time">17:37</span>
+    </section>
+
+    <!-- 5. OPEN WHEN VAULT -->
+    <section class="section" id="vault">
+      <p class="section-kicker">The vault</p>
+      <h2>Open when…</h2>
+      <p class="section-lead">Locked. Answer the guardian question from our chats.</p>
+      <div class="vault-grid">
+        <article class="vault-card" data-vault="0">
+          <div class="vault-locked">
+            <p class="vault-label">Open when you miss me</p>
+            <p class="vault-q">Guardian: Where did we first talk?</p>
+            <input type="text" placeholder="your answer…" autocomplete="off" />
+            <button type="button" class="unlock-btn">Unlock</button>
+            <p class="vault-err" hidden>Nope — think night one</p>
+          </div>
+          <div class="vault-open" hidden>
+            <p class="vault-label open">Unlocked</p>
+            <p>Whereee rrr uuu. I’m here. Same as TikTok night. Same as now. You don’t need my street — you already found me.</p>
+          </div>
+        </article>
+
+        <article class="vault-card" data-vault="1">
+          <div class="vault-locked">
+            <p class="vault-label">Open when you need a laugh</p>
+            <p class="vault-q">Guardian: What is 1+1… according to me?</p>
+            <input type="text" placeholder="a number…" autocomplete="off" />
+            <button type="button" class="unlock-btn">Unlock</button>
+            <p class="vault-err" hidden>Count the +</p>
+          </div>
+          <div class="vault-open" hidden>
+            <p class="vault-label open">Unlocked</p>
+            <p>It’s 3. You said 2. I said prove me wrong. You said oh my goosshh. Still the dumbest joke we own — and it still works.</p>
+          </div>
+        </article>
+
+        <article class="vault-card" data-vault="2">
+          <div class="vault-locked">
+            <p class="vault-label">Open when you’re tired</p>
+            <p class="vault-q">Guardian: What does your grandma call you?</p>
+            <input type="text" placeholder="two words…" autocomplete="off" />
+            <button type="button" class="unlock-btn">Unlock</button>
+            <p class="vault-err" hidden>She said it on night two</p>
+          </div>
+          <div class="vault-open" hidden>
+            <p class="vault-label open">Unlocked</p>
+            <p>Sleeping beauty. Have sweet dreams. You don’t owe the world a reply tonight. Just rest. I’ll still say goodnight.</p>
+          </div>
+        </article>
+
+        <article class="vault-card" data-vault="3">
+          <div class="vault-locked">
+            <p class="vault-label">Open on a heavy day</p>
+            <p class="vault-q">Guardian: What day is your birthday? (number only)</p>
+            <input type="text" placeholder="27…" autocomplete="off" />
+            <button type="button" class="unlock-btn">Unlock</button>
+            <p class="vault-err" hidden>You told me in September</p>
+          </div>
+          <div class="vault-open" hidden>
+            <p class="vault-label open">Unlocked</p>
+            <p>27. Eco exams, maths, distance — none of that makes you less. You’re still the girl who said she’s not going anywhere. Neither am I.</p>
+          </div>
+        </article>
       </div>
+    </section>
 
-      <!-- SEPT -->
-      <div class="day-chip">6 Sep 2026</div>
-      <div class="bubble them reveal special">
-        <p>Khoya 1sept · Baba 15sept · Ana 27sept</p>
-        <span class="time">12:32</span>
-      </div>
+    <!-- FINALE LETTER -->
+    <section class="section finale" id="finale">
+      <p class="section-kicker">27 September 2026</p>
+      <h2>Last message</h2>
+      <article class="letter">
+        <p>Firdaous,</p>
+        <p>I don’t know your street. I don’t have a box. I don’t have something with a price — because you don’t have a price.</p>
+        <p>Before October 2025 I wasn’t in your year. Then TikTok. Dinner. <em>M firdaous.</em> Then every goodnight after that.</p>
+        <p>Happy birthday. I’m still here.</p>
+        <p class="sign">Salmane</p>
+      </article>
+    </section>
 
-      <!-- BIRTHDAY -->
-      <div class="day-chip birthday-chip">27 Sep 2026 · Today</div>
-      <div class="system">Her birthday</div>
+    <footer class="foot">
+      <p>A birthday that fits in a link</p>
+      <button type="button" class="mute" id="muteBtn" hidden>Mute music</button>
+    </footer>
+  </main>
 
-      <div class="bubble me reveal last-bubble" id="lastBubble">
-        <p id="lastText"></p>
-        <span class="time">now</span>
-      </div>
-
-      <div class="typing" id="typing" hidden>
-        <span></span><span></span><span></span>
-      </div>
-
-      <div class="end-note reveal">
-        <p>No box. No address. No price.</p>
-        <p class="end-name">still here · Salmane</p>
-      </div>
-    </main>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
