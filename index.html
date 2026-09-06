@@ -3,131 +3,258 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#120c10" />
+  <meta name="theme-color" content="#0b141a" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>For Firdaous</title>
+  <title>For Firdaous · 27.09</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Great+Vibes&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="grain" aria-hidden="true"></div>
-  <div class="petals" aria-hidden="true"></div>
+  <div id="particles-js" aria-hidden="true"></div>
 
-  <section class="gate" id="gate">
-    <p class="gate-kicker">No box. No address. No price.</p>
-    <h1 class="gate-title">Firdaous</h1>
-    <p class="gate-sub">A birthday that fits in a link</p>
-    <p class="gate-date">27 · 09 · 2026</p>
-    <button class="seal" id="openGift" type="button">
-      <span class="seal-ring">Open</span>
+  <!-- LOCK SCREEN -->
+  <section class="lock" id="lock">
+    <div class="lock-glow" aria-hidden="true"></div>
+    <p class="lock-kicker animate__animated animate__fadeIn">No box · No address · No price</p>
+    <p class="lock-date animate__animated animate__fadeIn animate__delay-1s">27 · 09 · 2026</p>
+    <h1 class="lock-name animate__animated animate__fadeInUp animate__delay-1s">Firdaous</h1>
+    <p class="lock-sub animate__animated animate__fadeIn animate__delay-2s">Your year. One chat.</p>
+    <button class="open-chat animate__animated animate__pulse animate__infinite" id="openChat" type="button">
+      <span class="open-chat-dot"></span>
+      Open chat
     </button>
-    <p class="gate-hint">tap the seal</p>
+    <p class="lock-hint">tap to open</p>
   </section>
 
-  <main class="story" id="story" hidden>
-    <header class="hero">
-      <p class="whisper" id="typeLine"></p>
-      <h2 class="script">Happy birthday</h2>
-      <p class="her-name">Firdaous</p>
-      <p class="hero-line">Kayna ghir Firdaous wehda.</p>
-      <p class="scroll-hint">scroll</p>
+  <!-- CHAT APP -->
+  <div class="phone" id="phone" hidden>
+    <header class="chat-bar">
+      <div class="avatar">🌸</div>
+      <div class="chat-meta">
+        <p class="chat-name">Firdaous</p>
+        <p class="chat-status" id="chatStatus">online</p>
+      </div>
     </header>
 
-    <section class="chapter">
-      <p class="chapter-no">01</p>
-      <h3>How we met</h3>
-      <ol class="timeline">
-        <li>
-          <span class="when">29 Oct 2025</span>
-          <p>TikTok. You were at dinner. Then you came back. We said our names like it was nothing. It wasn’t.</p>
-          <blockquote>M firdaous</blockquote>
-        </li>
-        <li>
-          <span class="when">that same night</span>
-          <p>First goodnight. Before Instagram. Before the long chats. Just this.</p>
-          <blockquote>Have a sweet dreams lil girl</blockquote>
-        </li>
-        <li>
-          <span class="when">31 Oct 2025</span>
-          <p>You got Instagram back. I was still asking the same thing.</p>
-          <blockquote>Wheeeerrrree rrrr uuuu</blockquote>
-        </li>
-        <li>
-          <span class="when">15 Nov 2025</span>
-          <p>I didn’t buy you anything. I gave you a name.</p>
-          <blockquote>my priceless little princess</blockquote>
-        </li>
-      </ol>
-    </section>
+    <main class="chat" id="chat">
 
-    <section class="chapter">
-      <p class="chapter-no">02</p>
-      <h3>The little things</h3>
-      <ul class="moments">
-        <li>TikTok first. Dinner. Hello. Nice to meet you, Firdaous.</li>
-        <li>I loved your name the same night I learned it.</li>
-        <li>1 + 1 = 3, if you count the plus. You still won.</li>
-        <li>Goodnight, even when you were already asleep. Sleeping beauty.</li>
-        <li>WhatsApp. Instagram. Reels. Maths. Bac. Still here.</li>
-      </ul>
-    </section>
+      <!-- BEFORE YOU -->
+      <div class="day-chip">Before October 2025</div>
+      <div class="system">A year that started without me</div>
 
-    <section class="chapter">
-      <p class="chapter-no">03</p>
-      <h3>Open when…</h3>
-      <p class="chapter-lead">Not a package. Notes you can keep in your phone.</p>
-      <div class="envelopes">
-        <button class="env" type="button">
-          <span class="env-label">Open when you miss me</span>
-          <span class="env-body">Whereee rrr uuu. I’m here. Same as the first night, same as now.</span>
-        </button>
-        <button class="env" type="button">
-          <span class="env-label">Open when you’re tired</span>
-          <span class="env-body">Have a sweet dreams lil girl. Same as the first night on TikTok.</span>
-        </button>
-        <button class="env" type="button">
-          <span class="env-label">Open when school is heavy</span>
-          <span class="env-body">You still got this. You always did. I’m proud of you from far.</span>
-        </button>
-        <button class="env" type="button">
-          <span class="env-label">Open when you feel unseen</span>
-          <span class="env-body">Kayna ghir Firdaous wehda. I see you. I always did.</span>
-        </button>
-        <button class="env" type="button">
-          <span class="env-label">Open when the distance feels loud</span>
-          <span class="env-body">We never needed an address to find each other. We meet here. We meet in my heart.</span>
-        </button>
-        <button class="env" type="button">
-          <span class="env-label">Open on a bad day</span>
-          <span class="env-body">You’re priceless. That didn’t change because the day was ugly.</span>
-        </button>
+      <div class="bubble them reveal">
+        <p>Bac this year. Eco — because she wanted it, not because anyone said she was dumb.</p>
+        <span class="time">before</span>
       </div>
-    </section>
+      <div class="bubble them reveal">
+        <p>Eldest. Casa. Sleeping beauty — she can sleep anywhere if she feels safe.</p>
+        <span class="time">before</span>
+      </div>
+      <div class="bubble them reveal">
+        <p>Firdaous. A name you barely hear. She had not met you yet.</p>
+        <span class="time">before</span>
+      </div>
 
-    <section class="letter-wrap">
-      <article class="letter">
-        <p class="letter-date">27 September 2026</p>
-        <p>Firdaous,</p>
-        <p>I don’t know your street. I don’t have a box to send. I don’t have something with a price, because you don’t have a price.</p>
-        <p>I still remember the beginning. Not Instagram. TikTok. 29 October. You had gone to dinner. You came back. I asked your name. You said Firdaous. I loved it the same second. I told you I don’t hear it a lot here. You said you barely meet girls with the same name. That night I said have sweet dreams, lil girl. You said that was cute.</p>
-        <p>Then WhatsApp. Then Instagram. Then me asking where r u like an idiot, over and over. From that day I kept showing up. When you weren’t okay, I still said goodnight. I didn’t need you to answer. I just needed you to know I was there.</p>
-        <p>You are the girl who makes an ordinary night feel less empty. The girl who says she’s boring, but you never were. One day you told me you’re not going anywhere. I kept that.</p>
-        <p>Happy birthday. I don’t have an address for you. I have this: I remember you. I miss you. And I’m not going anywhere either.</p>
-        <p class="sign-off">Your person,</p>
-        <p class="sign-name">Salmane</p>
-      </article>
-    </section>
+      <!-- NIGHT ONE -->
+      <div class="day-chip">29 Oct 2025 · TikTok</div>
+      <div class="app-chip">TikTok</div>
+      <div class="system">The night she met you</div>
 
-    <footer class="end">
-      <p class="end-small">A gift with no price and no address</p>
-      <p class="script end-script">still here</p>
-      <p class="end-darija">I’m not going anywhere either.</p>
-    </footer>
-  </main>
+      <div class="bubble them reveal">
+        <p>Hiii sorry i didnt see ur msg i got go to take my dinner</p>
+        <span class="time">19:36</span>
+      </div>
+      <div class="bubble me reveal">
+        <p>Npr · Take ur time</p>
+        <span class="time">19:36</span>
+      </div>
+      <div class="bubble me reveal">
+        <p>My name is salmane btw</p>
+        <span class="time">20:04</span>
+      </div>
+      <div class="bubble them reveal">
+        <p>M firdaous</p>
+        <span class="time">20:04</span>
+      </div>
+      <div class="bubble them reveal">
+        <p>Nice to meet u salmane</p>
+        <span class="time">20:04</span>
+      </div>
+      <div class="bubble me reveal">
+        <p>I loved the name i dont hear it a lot here</p>
+        <span class="time">20:04</span>
+      </div>
+      <div class="bubble them reveal">
+        <p>Yea I barely meet girls w the same name</p>
+        <span class="time">20:04</span>
+      </div>
+      <div class="bubble me reveal">
+        <p>Okay sooooooooo wht is 1+1</p>
+        <span class="time">later</span>
+      </div>
+      <div class="bubble them reveal">
+        <p>It's 2</p>
+        <span class="time">later</span>
+      </div>
+      <div class="bubble me reveal">
+        <p>Wrong. It 3 prove me wrong · the + counts too</p>
+        <span class="time">later</span>
+      </div>
+      <div class="bubble me reveal">
+        <p>Have a sweet dreams lil girl</p>
+        <span class="time">night</span>
+      </div>
+      <div class="bubble them reveal">
+        <p>Owww That's cute · Tnxx</p>
+        <span class="time">night</span>
+      </div>
 
+      <!-- OCT 30 -->
+      <div class="day-chip">30 Oct 2025</div>
+      <div class="app-chip">WhatsApp</div>
+      <div class="bubble them reveal">
+        <p>Good morning · Am going to school now</p>
+        <span class="time">06:20</span>
+      </div>
+      <div class="bubble them reveal">
+        <p>My grandma calls me sleeping beauty</p>
+        <span class="time">evening</span>
+      </div>
+      <div class="bubble me reveal">
+        <p>Sleep well sleeping beauty</p>
+        <span class="time">22:16</span>
+      </div>
+
+      <!-- OCT 31 -->
+      <div class="day-chip">31 Oct 2025</div>
+      <div class="app-chip">Instagram</div>
+      <div class="bubble them reveal">
+        <p>I get back my inst</p>
+        <span class="time">11:19</span>
+      </div>
+      <div class="bubble me reveal">
+        <p>Good morning sweet girl</p>
+        <span class="time">10:30</span>
+      </div>
+
+      <!-- NOV -->
+      <div class="day-chip">November 2025</div>
+      <div class="bubble me reveal">
+        <p>Wheeeerrrree rrrr uuuu</p>
+        <span class="time">11 Nov</span>
+      </div>
+      <div class="system">15 Nov · you didn't buy anything. you gave her a name.</div>
+      <div class="bubble me reveal special">
+        <p>my priceless little princess</p>
+        <span class="time">15 Nov</span>
+      </div>
+      <div class="bubble them reveal special">
+        <p>M not going anywhere 🙂</p>
+        <span class="time">16 Nov</span>
+      </div>
+
+      <!-- DEC -->
+      <div class="day-chip">2 Dec 2025 · WhatsApp</div>
+      <div class="app-chip">WhatsApp</div>
+      <div class="bubble them reveal">
+        <p>Khoya gol 3a slm 🙂</p>
+        <span class="time">21:40</span>
+      </div>
+      <div class="bubble me reveal">
+        <p>Aslam alayekom warahemato Allah ta3ala wabarakatoh</p>
+        <span class="time">21:41</span>
+      </div>
+      <div class="system">Early December · she was sick. you still said goodnight.</div>
+      <div class="bubble me reveal">
+        <p>good night lil kind girl i hope u be better tomorrow</p>
+        <span class="time">6 Dec</span>
+      </div>
+      <div class="bubble me reveal">
+        <p>Have a sweet dreams princess</p>
+        <span class="time">6 Dec</span>
+      </div>
+
+      <!-- NEW YEAR -->
+      <div class="day-chip">1 Jan 2026</div>
+      <div class="system">You scheduled it so you'd be first</div>
+      <div class="bubble me reveal special">
+        <p>Happy new year sweetheart… you were the best part of 2025 and I cant wait to see you soon</p>
+        <span class="time">00:00</span>
+      </div>
+
+      <!-- JAN -->
+      <div class="day-chip">14 Jan 2026</div>
+      <div class="bubble them reveal special">
+        <p>Kayna ghir Firdaous w7daaa</p>
+        <span class="time">20:16</span>
+      </div>
+
+      <!-- FEB -->
+      <div class="day-chip">22 Feb 2026</div>
+      <div class="system">Your birthday · she remembered</div>
+      <div class="bubble them reveal">
+        <p>Happy birthday 🫶</p>
+        <span class="time">00:23</span>
+      </div>
+      <div class="bubble me reveal special">
+        <p>have a sweet dreams my little priceless princess</p>
+        <span class="time">23:51</span>
+      </div>
+
+      <!-- SUMMER -->
+      <div class="day-chip">14 Aug 2026</div>
+      <div class="system">Distance · Casa and the other end of Morocco</div>
+      <div class="bubble them reveal">
+        <p>Nta rak flekher dyl mghrib😂 fin bghiti ntla9aw</p>
+        <span class="time">13:52</span>
+      </div>
+      <div class="bubble me reveal">
+        <p>Netela9aw Fe 9elebi</p>
+        <span class="time">20:21</span>
+      </div>
+
+      <div class="day-chip">16 Aug 2026</div>
+      <div class="bubble them reveal">
+        <p>Wa anaaa · Firdaous</p>
+        <span class="time">15:00</span>
+      </div>
+      <div class="bubble me reveal">
+        <p>Aaaaaaaaa le3eferitaaa bedeleti nemera</p>
+        <span class="time">17:37</span>
+      </div>
+
+      <!-- SEPT -->
+      <div class="day-chip">6 Sep 2026</div>
+      <div class="bubble them reveal special">
+        <p>Khoya 1sept · Baba 15sept · Ana 27sept</p>
+        <span class="time">12:32</span>
+      </div>
+
+      <!-- BIRTHDAY -->
+      <div class="day-chip birthday-chip">27 Sep 2026 · Today</div>
+      <div class="system">Her birthday</div>
+
+      <div class="bubble me reveal last-bubble" id="lastBubble">
+        <p id="lastText"></p>
+        <span class="time">now</span>
+      </div>
+
+      <div class="typing" id="typing" hidden>
+        <span></span><span></span><span></span>
+      </div>
+
+      <div class="end-note reveal">
+        <p>No box. No address. No price.</p>
+        <p class="end-name">still here · Salmane</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
