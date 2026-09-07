@@ -247,8 +247,29 @@ function openHub() {
   window.addEventListener("scroll", updateHint, { passive: true });
 }
 
-blowBtn.addEventListener("click", () => {
+let candlesOut = false;
+let micStream = null;
+let micRaf = 0;
+let blowStreak = 0;
+
+function stopMicListen() {
+  if (micRaf) {
+    cancelAnimationFrame(micRaf);
+    micRaf = 0;
+  }
+  if (micStream) {
+    micStream.getTracks().forEach((t) => t.stop());
+    micStream = null;
+  }
+  cake.classList.remove("wind");
+}
+
+function blowCandles() {
+  if (candlesOut) return;
+  candlesOut = true;
+  stopMicListen();
   blowBtn.disabled = true;
+  cake.classList.remove("wind");
   cake.classList.add("blown");
   heroHint.textContent = "opening…";
   try {
@@ -257,7 +278,107 @@ blowBtn.addEventListener("click", () => {
   } catch (_) {}
   fireConfetti();
   window.setTimeout(openHub, 900);
+}
+
+async function startMicListen() {
+  if (candlesOut || micStream || !navigator.mediaDevices?.getUserMedia) {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      heroHint.textContent = "mic unavailable — tap the button";
+    }
+    return;
+  }
+
+  try {
+    heroHint.textContent = "allow microphone…";
+    micStream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        echoCancellation: false,
+        noiseSuppression: false,
+        autoGainControl: false,
+      },
+    });
+  } catch (_) {
+    heroHint.textContent = "mic blocked — tap the button instead";
+    return;
+  }
+
+  if (candlesOut) {
+    stopMicListen();
+    return;
+  }
+
+  const ctx = ensureAudio();
+  const source = ctx.createMediaStreamSource(micStream);
+  const analyser = ctx.createAnalyser();
+  analyser.fftSize = 512;
+  analyser.smoothingTimeConstant = 0.3;
+  source.connect(analyser);
+
+  const time = new Uint8Array(analyser.fftSize);
+  const freq = new Uint8Array(analyser.frequencyBinCount);
+  heroHint.textContent = "blow into your mic now";
+
+  const tick = () => {
+    if (candlesOut || !micStream) return;
+
+    analyser.getByteTimeDomainData(time);
+    let sum = 0;
+    for (let i = 0; i < time.length; i += 1) {
+      const v = (time[i] - 128) / 128;
+      sum += v * v;
+    }
+    const rms = Math.sqrt(sum / time.length);
+
+    analyser.getByteFrequencyData(freq);
+    let total = 0;
+    let low = 0;
+    const third = Math.floor(freq.length / 3);
+    for (let i = 0; i < freq.length; i += 1) {
+      total += freq[i];
+      if (i < third) low += freq[i];
+    }
+    const avg = total / freq.length;
+    const lowRatio = low / (total || 1);
+
+    // Blow = noisy/airy burst: loud + energy across spectrum (not a single speech peak)
+    const isBlow = rms > 0.085 && avg > 28 && lowRatio > 0.28;
+
+    if (rms > 0.045) cake.classList.add("wind");
+    else cake.classList.remove("wind");
+
+    if (isBlow) {
+      blowStreak += 1;
+      heroHint.textContent = "keep blowing…";
+      if (blowStreak >= 10) {
+        blowCandles();
+        return;
+      }
+    } else {
+      blowStreak = Math.max(0, blowStreak - 2);
+      if (blowStreak === 0) heroHint.textContent = "blow into your mic now";
+    }
+
+    micRaf = requestAnimationFrame(tick);
+  };
+
+  micRaf = requestAnimationFrame(tick);
+}
+
+blowBtn.addEventListener("click", () => {
+  blowCandles();
 });
+
+// Enable mic on first touch (needed on iPhone / some browsers)
+hero.addEventListener(
+  "pointerdown",
+  () => {
+    if (!candlesOut && !micStream) startMicListen();
+  },
+  { passive: true }
+);
+
+// Try early when the browser allows it without a gesture
+startMicListen();
 
 muteBtn.addEventListener("click", () => {
   if (musicOn) stopMusic();
