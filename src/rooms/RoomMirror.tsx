@@ -43,11 +43,11 @@ export default function RoomMirror({ onComplete }: Props) {
     >
       <p className="kicker">Aisle 4 · Fitting room</p>
       <h2>Wipe the fog</h2>
-      <p className="lead">Who’s always there when the glass clears?</p>
+      <p className="lead">The boy who built this shop is behind the glass. Type his name.</p>
 
       <div className={`mirror ${clear ? 'clear' : ''}`}>
         <div className="fog" />
-        <div className="whisper">{clear ? 'Still here.' : 'Who is it?'}</div>
+        <div className="whisper">{clear ? 'Still here. — Salmane' : 'Who is he?'}</div>
       </div>
 
       {!clear && (
@@ -55,7 +55,7 @@ export default function RoomMirror({ onComplete }: Props) {
           <input
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="type the name…"
+            placeholder="his name…"
             autoCapitalize="off"
             autoComplete="off"
           />
