@@ -4,23 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#1a1520" />
-  <title>Firdaous · Birthday Hub</title>
+  <title>Firdaous · Birthday Game</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎂</text></svg>" />
-  <link rel="stylesheet" href="styles.css?v=8" />
+  <link rel="stylesheet" href="styles.css?v=11" />
 </head>
 <body>
   <canvas id="confetti-canvas" aria-hidden="true"></canvas>
 
   <section class="hero" id="hero">
-    <p class="eyebrow animate__animated animate__fadeIn">27 · 09 · 2026</p>
-    <h1 class="animate__animated animate__fadeInUp">Welcome to<br /><span>Firdaous</span>’s<br />Birthday Hub</h1>
-    <p class="hero-sub animate__animated animate__fadeIn animate__delay-1s">A small gift for a long-distance friendship.</p>
+    <p class="eyebrow">27 · 09 · 2026</p>
+    <h1>Happy birthday<br /><span>Firdaous</span></h1>
+    <p class="hero-sub">One cake. One game. Zero boring essays.</p>
 
-    <div class="cake-wrap animate__animated animate__fadeInUp animate__delay-1s">
+    <div class="cake-wrap">
       <div class="cake" id="cake" aria-hidden="true">
         <div class="candle c1"><i class="flame"></i></div>
         <div class="candle c2"><i class="flame"></i></div>
@@ -30,298 +29,113 @@
       </div>
     </div>
 
-    <button type="button" class="blow-btn animate__animated animate__pulse animate__infinite" id="blowBtn">
-      Blow out the candles
-    </button>
-    <p class="hint" id="heroHint">blow into your mic — or tap the button</p>
+    <button type="button" class="blow-btn" id="blowBtn">Blow out the candles</button>
+    <p class="hint" id="heroHint">blow into your mic — or tap</p>
   </section>
 
   <main id="hub" class="hub" hidden>
-    <nav class="toc">
-      <a href="#memories">Memories</a>
-      <a href="#journey">Journey</a>
-      <a href="#reasons">Reasons</a>
-      <a href="#vault">Open When</a>
-      <a href="#finale">Letter</a>
-    </nav>
-
-    <div class="hub-welcome" id="hubWelcome">
-      <p class="hub-welcome-text">Keep scrolling — memories, secrets, and a letter wait below.</p>
-      <a class="scroll-cue" href="#memories" id="scrollCue" aria-label="Scroll down">
-        <span>Scroll down</span>
-        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-          <path fill="currentColor" d="M12 16.5 4.5 9l1.4-1.4L12 13.7l6.1-6.1L19.5 9 12 16.5z"/>
-        </svg>
-      </a>
-    </div>
-
-    <section class="section" id="memories">
-      <p class="section-kicker">Memory matrix</p>
-      <h2>Moments only we have</h2>
-      <p class="section-lead">Tap a card to flip it. Then keep scrolling.</p>
-      <div class="polaroids">
-        <button type="button" class="polaroid r1 flip-card">
-          <div class="flip-inner">
-            <div class="flip-front">
-              <div class="photo p-tiktok">
-                <span>The start</span>
-                <strong>We met</strong>
-              </div>
-              <p class="caption">Online. Random. Unexpected.</p>
-            </div>
-            <div class="flip-back">
-              <p>One hello turned into a whole friendship.</p>
-            </div>
-          </div>
-        </button>
-
-        <button type="button" class="polaroid r2 flip-card">
-          <div class="flip-inner">
-            <div class="flip-front">
-              <div class="photo p-joke">
-                <span>Early days</span>
-                <strong>The laughs</strong>
-              </div>
-              <p class="caption">Dumb jokes. Inside jokes. Us.</p>
-            </div>
-            <div class="flip-back">
-              <p>If we can laugh from far away, distance loses a little.</p>
-            </div>
-          </div>
-        </button>
-
-        <button type="button" class="polaroid r3 flip-card">
-          <div class="flip-inner">
-            <div class="flip-front">
-              <div class="photo p-sleep">
-                <span>Late nights</span>
-                <strong>Goodnights</strong>
-              </div>
-              <p class="caption">Even when one of us was already asleep.</p>
-            </div>
-            <div class="flip-back">
-              <p>Showing up doesn’t always need a long message.</p>
-            </div>
-          </div>
-        </button>
-
-        <button type="button" class="polaroid r1 flip-card">
-          <div class="flip-inner">
-            <div class="flip-front">
-              <div class="photo p-name">
-                <span>A nickname</span>
-                <strong>Priceless</strong>
-              </div>
-              <p class="caption">Not because of a gift. Because of you.</p>
-            </div>
-            <div class="flip-back">
-              <p>Some people don’t come with a price tag.</p>
-            </div>
-          </div>
-        </button>
-
-        <button type="button" class="polaroid r2 flip-card">
-          <div class="flip-inner">
-            <div class="flip-front">
-              <div class="photo p-stay">
-                <span>A promise</span>
-                <strong>Still here</strong>
-              </div>
-              <p class="caption">Staying mattered more than perfect timing.</p>
-            </div>
-            <div class="flip-back">
-              <p>We’re still writing the story.</p>
-            </div>
-          </div>
-        </button>
-
-        <button type="button" class="polaroid r3 flip-card">
-          <div class="flip-inner">
-            <div class="flip-front">
-              <div class="photo p-salam">
-                <span>Closer</span>
-                <strong>Daily chat</strong>
-              </div>
-              <p class="caption">From strangers to someone I check on.</p>
-            </div>
-            <div class="flip-back">
-              <p>Different cities. Same conversation.</p>
-            </div>
-          </div>
-        </button>
+    <header class="game-bar">
+      <div class="dots" id="dots" aria-hidden="true">
+        <i class="on"></i><i></i><i></i><i></i><i></i>
       </div>
+      <button type="button" class="mute" id="muteBtn" hidden>Mute</button>
+    </header>
+
+    <!-- Level 0: start -->
+    <section class="level show" data-level="0">
+      <p class="lvl">Level 0</p>
+      <h2>Candles down.<br />Brain on.</h2>
+      <p class="short">5 tiny levels. Short answers. Bad jokes allowed.</p>
+      <button type="button" class="next-btn" data-next="1">Start the game</button>
     </section>
 
-    <section class="section" id="journey">
-      <p class="section-kicker">The journey</p>
-      <h2>How we got here</h2>
-      <div class="timeline">
-        <div class="tl-item">
-          <span class="tl-date">Before</span>
-          <h3>Two separate lives</h3>
-          <p>School. Family. Normal days. We didn’t know each other yet.</p>
-        </div>
-        <div class="tl-item">
-          <span class="tl-date">The beginning</span>
-          <h3>We met online</h3>
-          <p>A simple hello. Names. A first conversation that didn’t feel forced.</p>
-        </div>
-        <div class="tl-item">
-          <span class="tl-date">Getting closer</span>
-          <h3>Talking became natural</h3>
-          <p>Jokes. School stress. Good mornings. Good nights. The small stuff that builds trust.</p>
-        </div>
-        <div class="tl-item">
-          <span class="tl-date">Through the hard days</span>
-          <h3>We stayed</h3>
-          <p>Busy weeks. Tired nights. Distance. And still — messages that meant “I’m here.”</p>
-        </div>
-        <div class="tl-item">
-          <span class="tl-date">Milestones</span>
-          <h3>We remembered each other</h3>
-          <p>Birthdays. New year. Moments where showing up said more than a gift box ever could.</p>
-        </div>
-        <div class="tl-item">
-          <span class="tl-date">Long distance</span>
-          <h3>Far, but not gone</h3>
-          <p>Different places. Same friendship. Waiting for the day we meet for real.</p>
-        </div>
-        <div class="tl-item tl-now">
-          <span class="tl-date">27 Sep 2026</span>
-          <h3>Your birthday</h3>
-          <p>Today is about you. This whole page is the gift.</p>
-        </div>
+    <!-- Level 1 -->
+    <section class="level" data-level="1" hidden>
+      <p class="lvl">Level 1 / 5</p>
+      <h2>Where did we first meet?</h2>
+      <p class="short">Pick one. No pressure. (okay a little pressure)</p>
+      <div class="choices">
+        <button type="button" class="choice" data-ok="0">In a supermarket 🛒</button>
+        <button type="button" class="choice" data-ok="1">On TikTok 📱</button>
+        <button type="button" class="choice" data-ok="0">At school assembly 🎓</button>
       </div>
+      <p class="react" id="react1" hidden></p>
+      <button type="button" class="next-btn" data-next="2" hidden>Next level →</button>
     </section>
 
-    <section class="section" id="reasons">
-      <p class="section-kicker">Why you</p>
-      <h2>Reasons you’re priceless</h2>
-      <p class="section-lead">Tap to open.</p>
-      <div class="accordion">
-        <button type="button" class="acc-btn">You made a random chat feel real<span>+</span></button>
-        <div class="acc-panel">Most online hellos disappear. Ours didn’t.</div>
-
-        <button type="button" class="acc-btn">You make me laugh from far away<span>+</span></button>
-        <div class="acc-panel">Distance is quieter when someone can still make your day lighter.</div>
-
-        <button type="button" class="acc-btn">You care in simple ways<span>+</span></button>
-        <div class="acc-panel">A check-in. A goodnight. A “hru?” when it matters.</div>
-
-        <button type="button" class="acc-btn">You’re honest about hard days<span>+</span></button>
-        <div class="acc-panel">School, stress, tiredness — you don’t pretend everything is perfect.</div>
-
-        <button type="button" class="acc-btn">You keep showing up<span>+</span></button>
-        <div class="acc-panel">Not every day is loud. Consistency is the quiet gift.</div>
-
-        <button type="button" class="acc-btn">You remember the little things<span>+</span></button>
-        <div class="acc-panel">Details. Dates. Moods. That’s rare.</div>
-
-        <button type="button" class="acc-btn">You make ordinary nights better<span>+</span></button>
-        <div class="acc-panel">A normal evening feels less empty when you’re in it.</div>
-
-        <button type="button" class="acc-btn">Long distance didn’t erase you<span>+</span></button>
-        <div class="acc-panel">You’re still part of the day, even from another city.</div>
-
-        <button type="button" class="acc-btn">You’re easy to root for<span>+</span></button>
-        <div class="acc-panel">Your goals, your effort, your future — I’m proud of you from here.</div>
-
-        <button type="button" class="acc-btn">You don’t have a price<span>+</span></button>
-        <div class="acc-panel">That’s why this gift is a link, not a receipt.</div>
+    <!-- Level 2 -->
+    <section class="level" data-level="2" hidden>
+      <p class="lvl">Level 2 / 5</p>
+      <h2>Quick math check</h2>
+      <p class="short">1 + 1 = ?</p>
+      <div class="choices">
+        <button type="button" class="choice" data-ok="0">2 (boring)</button>
+        <button type="button" class="choice" data-ok="1">3 (correct energy)</button>
+        <button type="button" class="choice" data-ok="0">11 (chaotic)</button>
       </div>
+      <p class="react" id="react2" hidden></p>
+      <button type="button" class="next-btn" data-next="3" hidden>Next level →</button>
     </section>
 
-    <section class="section" id="vault">
-      <p class="section-kicker">The vault</p>
-      <h2>Open when…</h2>
-      <p class="section-lead">Answer a simple question about us to unlock each note.</p>
-      <div class="vault-grid">
-        <article class="vault-card" data-vault="0">
-          <div class="vault-locked">
-            <p class="vault-label">Open when you miss me</p>
-            <p class="vault-q">Where did we first meet? (one word)</p>
-            <input type="text" placeholder="online / tiktok…" autocomplete="off" />
-            <button type="button" class="unlock-btn">Unlock</button>
-            <p class="vault-err" hidden>Try again</p>
-          </div>
-          <div class="vault-open" hidden>
-            <p class="vault-label open">Unlocked</p>
-            <p>I’m still here. Different city, same person. Message me when you need to — even if it’s just “hru.”</p>
-          </div>
-        </article>
-
-        <article class="vault-card" data-vault="1">
-          <div class="vault-locked">
-            <p class="vault-label">Open when you need a laugh</p>
-            <p class="vault-q">What’s my name?</p>
-            <input type="text" placeholder="…" autocomplete="off" />
-            <button type="button" class="unlock-btn">Unlock</button>
-            <p class="vault-err" hidden>You know this one</p>
-          </div>
-          <div class="vault-open" hidden>
-            <p class="vault-label open">Unlocked</p>
-            <p>Reminder: we survived worse jokes than today. Send me the dumbest meme you have. I’ll match it.</p>
-          </div>
-        </article>
-
-        <article class="vault-card" data-vault="2">
-          <div class="vault-locked">
-            <p class="vault-label">Open when you’re tired</p>
-            <p class="vault-q">Are we long distance? (yes/no)</p>
-            <input type="text" placeholder="yes…" autocomplete="off" />
-            <button type="button" class="unlock-btn">Unlock</button>
-            <p class="vault-err" hidden>Yes — and that’s okay</p>
-          </div>
-          <div class="vault-open" hidden>
-            <p class="vault-label open">Unlocked</p>
-            <p>Rest. You don’t have to reply perfectly. Sleep. Tomorrow can wait. Goodnight from here.</p>
-          </div>
-        </article>
-
-        <article class="vault-card" data-vault="3">
-          <div class="vault-locked">
-            <p class="vault-label">Open on your birthday</p>
-            <p class="vault-q">What day is your birthday? (number)</p>
-            <input type="text" placeholder="27…" autocomplete="off" />
-            <button type="button" class="unlock-btn">Unlock</button>
-            <p class="vault-err" hidden>The day this page is for</p>
-          </div>
-          <div class="vault-open" hidden>
-            <p class="vault-label open">Unlocked</p>
-            <p>Happy birthday. Thank you for being in my life across the distance. I’m glad we met.</p>
-          </div>
-        </article>
-      </div>
+    <!-- Level 3 -->
+    <section class="level" data-level="3" hidden>
+      <p class="lvl">Level 3 / 5</p>
+      <h2>What’s my name?</h2>
+      <p class="short">If you get this wrong I’m deleting the wifi.</p>
+      <form class="type-form" id="nameForm">
+        <input type="text" id="nameInput" placeholder="type it…" autocomplete="off" autocapitalize="off" />
+        <button type="submit" class="next-btn">Unlock</button>
+      </form>
+      <p class="react" id="react3" hidden></p>
+      <button type="button" class="next-btn" data-next="4" hidden>Next level →</button>
     </section>
 
-    <section class="section finale" id="finale">
-      <p class="section-kicker">27 September 2026</p>
-      <h2>A letter</h2>
-      <article class="letter">
+    <!-- Level 4 -->
+    <section class="level" data-level="4" hidden>
+      <p class="lvl">Level 4 / 5</p>
+      <h2>Your birthday is…</h2>
+      <p class="short">Tap the real one.</p>
+      <div class="choices grid3">
+        <button type="button" class="choice" data-ok="0">15</button>
+        <button type="button" class="choice" data-ok="1">27</button>
+        <button type="button" class="choice" data-ok="0">31</button>
+      </div>
+      <p class="react" id="react4" hidden></p>
+      <button type="button" class="next-btn" data-next="5" hidden>Final level →</button>
+    </section>
+
+    <!-- Level 5: prize -->
+    <section class="level finale-level" data-level="5" hidden>
+      <p class="lvl">Level 5 / 5 · Prize</p>
+      <h2>You won the letter</h2>
+      <article class="letter short-letter">
         <p>Firdaous,</p>
-        <p>I don’t know your street. I don’t have a box to send. And maybe that’s okay — because what I feel for you was never something I could wrap.</p>
-        <p>We met online, almost by accident, and somehow you became the softest part of my days. Across cities. Across late nights. Across every “where are you” I never stopped asking.</p>
-        <p>I don’t need a map to find you. You’re already in the way I wait for your messages, in the way your name sits differently in my chest, in the way distance hurts a little less when I remember you’re still here.</p>
-        <p>Happy birthday, my priceless girl. If I could give you the world, I would. Tonight I only have this: I’m glad it was you. I’m glad it’s still you. And I’m not going anywhere.</p>
+        <p>No box. No address. Just this: you became the softest part of my days from far away.</p>
+        <p>Happy birthday, my priceless girl. I’m glad it was you. I’m not going anywhere.</p>
         <p class="sign">Salmane</p>
         <p class="sign-note">written by salmane not a fucking dumb ai</p>
       </article>
+      <button type="button" class="next-btn" id="replayFx">Throw more confetti</button>
+      <button type="button" class="ghost-btn" id="openWhenBtn">One more secret →</button>
     </section>
 
-    <footer class="foot">
-      <p>A birthday that fits in a link</p>
-      <button type="button" class="mute" id="muteBtn" hidden>Mute music</button>
-    </footer>
+    <!-- Bonus open-when -->
+    <section class="level" data-level="6" hidden>
+      <p class="lvl">Bonus</p>
+      <h2>Open when you miss me</h2>
+      <p class="short">One word: where did we meet?</p>
+      <form class="type-form" id="bonusForm">
+        <input type="text" id="bonusInput" placeholder="tiktok / online…" autocomplete="off" />
+        <button type="submit" class="next-btn">Open</button>
+      </form>
+      <div class="bonus-open" id="bonusOpen" hidden>
+        <p>I’m still here. Different city. Same person. Text me — even if it’s just “hru.”</p>
+        <p class="done-line">Game complete. You’re stuck with me now. 🎂</p>
+      </div>
+    </section>
   </main>
 
-  <div class="scroll-hint" id="scrollHint" hidden>
-    <span>Scroll down for more</span>
-    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-      <path fill="currentColor" d="M12 16.5 4.5 9l1.4-1.4L12 13.7l6.1-6.1L19.5 9 12 16.5z"/>
-    </svg>
-  </div>
-
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-  <script src="script.js?v=10"></script>
+  <script src="script.js?v=11"></script>
 </body>
 </html>

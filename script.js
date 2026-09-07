@@ -4,6 +4,7 @@ const blowBtn = document.getElementById("blowBtn");
 const cake = document.getElementById("cake");
 const muteBtn = document.getElementById("muteBtn");
 const heroHint = document.getElementById("heroHint");
+const dots = document.getElementById("dots");
 
 let audioCtx = null;
 let musicNodes = null;
@@ -24,11 +25,6 @@ const NOTE = {
   E4: 329.63, F4: 349.23, G4: 392.0, A4: 440.0, Bb4: 466.16, C5: 523.25,
 };
 
-/**
- * Happy Birthday — warmer arrangement:
- * melody + soft harmony + gentle bass, with light sparkle.
- * Each entry: [melodyHz, durationBeats, harmonyHz|null, bassHz|null]
- */
 const BEAT = 0.38;
 const BIRTHDAY_SONG = [
   [NOTE.C4, 0.75, NOTE.A3, NOTE.F3], [NOTE.C4, 0.25, null, null],
@@ -55,7 +51,6 @@ function playVoice(ctx, dest, freq, start, dur, type, peak, harm = 0) {
   osc.type = type;
   osc.frequency.value = freq;
   const attack = Math.min(0.04, dur * 0.12);
-  const release = Math.min(0.22, dur * 0.35);
   gain.gain.setValueAtTime(0.0001, start);
   gain.gain.exponentialRampToValueAtTime(peak, start + attack);
   gain.gain.exponentialRampToValueAtTime(peak * 0.55, start + dur * 0.5);
@@ -89,7 +84,6 @@ function scheduleBirthday(ctx, bus, when) {
     playVoice(ctx, bus, mel, t, noteLen * 0.95, "sine", 0.1, 0);
     if (harm) playVoice(ctx, bus, harm, t, noteLen * 1.05, "sine", 0.07, 0);
     if (bass) playVoice(ctx, bus, bass, t, noteLen * 1.15, "sine", 0.11, 0);
-    // tiny high sparkle on longer notes
     if (beats >= 1) playVoice(ctx, bus, mel * 3, t + 0.02, noteLen * 0.35, "sine", 0.025, 0);
     t += dur;
   });
@@ -109,7 +103,6 @@ function startMusic() {
   filter.frequency.value = 2800;
   filter.Q.value = 0.7;
 
-  // Soft room echo
   const delay = ctx.createDelay(1.0);
   delay.delayTime.value = 0.22;
   const delayGain = ctx.createGain();
@@ -128,7 +121,6 @@ function startMusic() {
   feedback.connect(delay);
   master.connect(ctx.destination);
 
-  // Warm moving pad (F major-ish)
   const padGain = ctx.createGain();
   padGain.gain.value = 0.028;
   padGain.connect(filter);
@@ -158,7 +150,7 @@ function startMusic() {
   musicNodes = { master, padOscs, padGain, bus, delay, feedback };
   musicOn = true;
   muteBtn.hidden = false;
-  muteBtn.textContent = "Mute music";
+  muteBtn.textContent = "Mute";
 }
 
 function stopMusic() {
@@ -168,7 +160,7 @@ function stopMusic() {
   }
   if (!musicNodes || !audioCtx) {
     musicOn = false;
-    muteBtn.textContent = "Play music";
+    muteBtn.textContent = "Music";
     return;
   }
   musicNodes.padOscs.forEach(({ o, lfo }) => {
@@ -182,7 +174,7 @@ function stopMusic() {
   } catch (_) {}
   musicNodes = null;
   musicOn = false;
-  muteBtn.textContent = "Play music";
+  muteBtn.textContent = "Music";
 }
 
 function whoosh() {
@@ -206,19 +198,19 @@ function whoosh() {
   noise.start();
 }
 
-function fireConfetti() {
+function fireConfetti(big = false) {
   if (typeof confetti !== "function") return;
-  const end = Date.now() + 1800;
+  const end = Date.now() + (big ? 2200 : 1400);
   (function frame() {
     confetti({
-      particleCount: 4,
+      particleCount: big ? 7 : 4,
       angle: 60,
       spread: 55,
       origin: { x: 0, y: 0.7 },
-      colors: ["#ff7a6b", "#ffb4a8", "#fff6ea", "#f5d0a9"],
+      colors: ["#ff7a6b", "#ffb4a8", "#fff6ea", "#34d399"],
     });
     confetti({
-      particleCount: 4,
+      particleCount: big ? 7 : 4,
       angle: 120,
       spread: 55,
       origin: { x: 1, y: 0.7 },
@@ -228,23 +220,16 @@ function fireConfetti() {
   })();
 }
 
+function popConfetti() {
+  if (typeof confetti !== "function") return;
+  confetti({ particleCount: 55, spread: 70, origin: { y: 0.65 } });
+}
+
 function openHub() {
   hero.hidden = true;
   hub.hidden = false;
   window.scrollTo({ top: 0, behavior: "instant" });
-
-  const hint = document.getElementById("scrollHint");
-  const finale = document.getElementById("finale");
-  if (hint) hint.hidden = false;
-
-  const updateHint = () => {
-    if (!hint || !finale) return;
-    const rect = finale.getBoundingClientRect();
-    const nearLetter = rect.top < window.innerHeight * 0.75;
-    hint.hidden = nearLetter;
-    if (nearLetter) window.removeEventListener("scroll", updateHint);
-  };
-  window.addEventListener("scroll", updateHint, { passive: true });
+  showLevel(0);
 }
 
 let candlesOut = false;
@@ -271,7 +256,7 @@ function blowCandles() {
   blowBtn.disabled = true;
   cake.classList.remove("wind");
   cake.classList.add("blown");
-  heroHint.textContent = "opening…";
+  heroHint.textContent = "game loading…";
   try {
     whoosh();
     startMusic();
@@ -339,8 +324,6 @@ async function startMicListen() {
     }
     const avg = total / freq.length;
     const lowRatio = low / (total || 1);
-
-    // Blow = noisy/airy burst: loud + energy across spectrum (not a single speech peak)
     const isBlow = rms > 0.085 && avg > 28 && lowRatio > 0.28;
 
     if (rms > 0.045) cake.classList.add("wind");
@@ -364,11 +347,8 @@ async function startMicListen() {
   micRaf = requestAnimationFrame(tick);
 }
 
-blowBtn.addEventListener("click", () => {
-  blowCandles();
-});
+blowBtn.addEventListener("click", () => blowCandles());
 
-// Enable mic on first touch (needed on iPhone / some browsers)
 hero.addEventListener(
   "pointerdown",
   () => {
@@ -377,7 +357,6 @@ hero.addEventListener(
   { passive: true }
 );
 
-// Try early when the browser allows it without a gesture
 startMicListen();
 
 muteBtn.addEventListener("click", () => {
@@ -385,29 +364,7 @@ muteBtn.addEventListener("click", () => {
   else startMusic();
 });
 
-/* Accordion */
-document.querySelectorAll(".acc-btn").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const panel = btn.nextElementSibling;
-    const open = panel.classList.contains("show");
-    document.querySelectorAll(".acc-panel").forEach((p) => p.classList.remove("show"));
-    document.querySelectorAll(".acc-btn").forEach((b) => {
-      b.classList.remove("open");
-      b.querySelector("span").textContent = "+";
-    });
-    if (!open) {
-      panel.classList.add("show");
-      btn.classList.add("open");
-      btn.querySelector("span").textContent = "−";
-    }
-  });
-});
-
-/* Flip polaroids */
-document.querySelectorAll(".flip-card").forEach((card) => {
-  card.addEventListener("click", () => card.classList.toggle("flipped"));
-});
-
+/* —— GAME —— */
 function normalize(s) {
   return (s || "")
     .toLowerCase()
@@ -418,58 +375,141 @@ function normalize(s) {
     .trim();
 }
 
-/* Vault answers — simple & logical */
-const ANSWERS = [
-  (v) => {
-    const t = normalize(v);
-    return t.includes("online") || t.includes("tiktok") || t.includes("internet") || t === "app";
-  },
-  (v) => {
-    const t = normalize(v);
-    return t.includes("salmane") || t.includes("salman");
-  },
-  (v) => {
-    const t = normalize(v);
-    return t === "yes" || t === "y" || t.includes("yeah") || t.includes("yep") || t.includes("oui") || t.includes("distance") || t.includes("far");
-  },
-  (v) => {
-    const t = normalize(v);
-    return t === "27" || t.includes("twenty seven") || t.includes("twentyseven");
-  },
-];
-
-document.querySelectorAll(".vault-card").forEach((card) => {
-  const idx = Number(card.getAttribute("data-vault"));
-  const input = card.querySelector("input");
-  const btn = card.querySelector(".unlock-btn");
-  const err = card.querySelector(".vault-err");
-  const locked = card.querySelector(".vault-locked");
-  const open = card.querySelector(".vault-open");
-
-  function tryUnlock(e) {
-    if (e) e.preventDefault();
-    const val = normalize(input.value);
-    if (ANSWERS[idx](val)) {
-      err.hidden = true;
-      locked.hidden = true;
-      open.hidden = false;
-      card.classList.add("unlocked");
-      if (typeof confetti === "function") {
-        confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 } });
-      }
-    } else {
-      err.hidden = false;
-      input.focus();
+function showLevel(n) {
+  document.querySelectorAll(".level").forEach((el) => {
+    const match = Number(el.getAttribute("data-level")) === n;
+    el.hidden = !match;
+    if (match) {
+      el.classList.remove("show");
+      void el.offsetWidth;
+      el.classList.add("show");
     }
+  });
+
+  if (dots) {
+    const items = [...dots.querySelectorAll("i")];
+    items.forEach((dot, i) => {
+      dot.classList.toggle("on", i === Math.min(n, 4));
+      dot.classList.toggle("done", i < Math.min(n, 5));
+    });
   }
 
-  btn.addEventListener("click", tryUnlock);
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") tryUnlock(e);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  if (n === 5) fireConfetti(true);
+}
+
+document.querySelectorAll("[data-next]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    showLevel(Number(btn.getAttribute("data-next")));
+    popConfetti();
   });
 });
 
-/* Deep link for preview */
+function wireChoices(levelEl, reactId, okMsg, badMsg) {
+  const react = document.getElementById(reactId);
+  const next = levelEl.querySelector("[data-next]");
+  levelEl.querySelectorAll(".choice").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (levelEl.dataset.done === "1") return;
+      const ok = btn.getAttribute("data-ok") === "1";
+      if (ok) {
+        levelEl.dataset.done = "1";
+        btn.classList.add("correct");
+        levelEl.querySelectorAll(".choice").forEach((b) => { b.disabled = true; });
+        if (react) {
+          react.hidden = false;
+          react.classList.remove("bad");
+          react.textContent = okMsg;
+        }
+        if (next) next.hidden = false;
+        popConfetti();
+      } else {
+        btn.classList.remove("wrong");
+        void btn.offsetWidth;
+        btn.classList.add("wrong");
+        hub.classList.remove("shake-screen");
+        void hub.offsetWidth;
+        hub.classList.add("shake-screen");
+        if (react) {
+          react.hidden = false;
+          react.classList.add("bad");
+          react.textContent = badMsg;
+        }
+      }
+    });
+  });
+}
+
+wireChoices(
+  document.querySelector('[data-level="1"]'),
+  "react1",
+  "Correct. Random app. Real friendship.",
+  "Nope. Try again 💀"
+);
+
+wireChoices(
+  document.querySelector('[data-level="2"]'),
+  "react2",
+  "YES. 1+1=3. Math who?",
+  "Too logical. Be unserious."
+);
+
+wireChoices(
+  document.querySelector('[data-level="4"]'),
+  "react4",
+  "27. The whole point of this page.",
+  "Wrong day. Wrong universe."
+);
+
+document.getElementById("nameForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const level = document.querySelector('[data-level="3"]');
+  if (level.dataset.done === "1") return;
+  const val = normalize(document.getElementById("nameInput").value);
+  const react = document.getElementById("react3");
+  const next = level.querySelector("[data-next]");
+  if (val.includes("salmane") || val.includes("salman")) {
+    level.dataset.done = "1";
+    react.hidden = false;
+    react.classList.remove("bad");
+    react.textContent = "Okay you know me. Respect.";
+    next.hidden = false;
+    popConfetti();
+  } else {
+    react.hidden = false;
+    react.classList.add("bad");
+    react.textContent = "Hmm… try again (hint: starts with S)";
+    hub.classList.remove("shake-screen");
+    void hub.offsetWidth;
+    hub.classList.add("shake-screen");
+  }
+});
+
+document.getElementById("replayFx").addEventListener("click", () => fireConfetti(true));
+
+document.getElementById("openWhenBtn").addEventListener("click", () => {
+  showLevel(6);
+});
+
+document.getElementById("bonusForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const val = normalize(document.getElementById("bonusInput").value);
+  const ok =
+    val.includes("tiktok") ||
+    val.includes("online") ||
+    val.includes("internet") ||
+    val === "app";
+  if (ok) {
+    document.getElementById("bonusOpen").hidden = false;
+    document.getElementById("bonusForm").hidden = true;
+    fireConfetti(true);
+  } else {
+    hub.classList.remove("shake-screen");
+    void hub.offsetWidth;
+    hub.classList.add("shake-screen");
+  }
+});
+
 if (new URLSearchParams(window.location.search).has("open")) {
   openHub();
 }
