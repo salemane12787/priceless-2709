@@ -1,0 +1,26 @@
+{
+  "name": "priceless-shop",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node -e \"require('fs').copyFileSync('index.dev.html','index.html')\" && vite",
+    "build": "node -e \"require('fs').copyFileSync('index.dev.html','index.html')\" && vite build && node -e \"require('fs').copyFileSync('docs/index.html','index.html'); require('fs').cpSync('docs/assets','assets',{recursive:true}); require('fs').copyFileSync('docs/robots.txt','robots.txt');\"",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.9.3",
+    "framer-motion": "^12.23.24",
+    "lucide-react": "^0.554.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}
