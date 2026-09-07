@@ -11,7 +11,7 @@ export default function RoomCheckout({ onRestart }: Props) {
 
   useEffect(() => {
     sideCannons();
-    const t = window.setTimeout(() => setStage('letter'), 1600);
+    const t = window.setTimeout(() => setStage('letter'), 4200);
     return () => clearTimeout(t);
   }, []);
 
@@ -32,16 +32,59 @@ export default function RoomCheckout({ onRestart }: Props) {
       {stage === 'receipt' ? (
         <motion.div
           className="receipt"
-          initial={{ y: 30, opacity: 0 }}
+          initial={{ y: 40, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.55 }}
         >
           <div className="shop-name">PRICELESS</div>
-          <div>1× heart (long distance edition)</div>
-          <div style={{ opacity: 0.6, marginTop: 6 }}>SKU: 27-09-2026</div>
+          <p className="receipt-meta">a shop for Firdaous · 27.09.2026</p>
+          <p className="receipt-meta">Cashier: Salmane · Payment: none</p>
+          <div className="receipt-rule" />
+
+          <div className="receipt-row">
+            <span>1× ripped fake price tag</span>
+            <span>∞</span>
+          </div>
+          <div className="receipt-row">
+            <span>1× TikTok hello (origin)</span>
+            <span>∞</span>
+          </div>
+          <div className="receipt-row">
+            <span>1× broken calculator (1+1=3)</span>
+            <span>∞</span>
+          </div>
+          <div className="receipt-row">
+            <span>1× cleared mirror</span>
+            <span>∞</span>
+          </div>
+          <div className="receipt-row">
+            <span>1× two-city almost-hug</span>
+            <span>∞</span>
+          </div>
+          <div className="receipt-row">
+            <span>3× do-not-open parcels</span>
+            <span>∞</span>
+          </div>
+          <div className="receipt-row">
+            <span>1× heart (long distance edition)</span>
+            <span>∞</span>
+          </div>
+
+          <div className="receipt-rule" />
+          <div className="receipt-row dim">
+            <span>Subtotal</span>
+            <span>not for sale</span>
+          </div>
+          <div className="receipt-row dim">
+            <span>Tax on feelings</span>
+            <span>0.00</span>
+          </div>
           <div className="line">
             <span>TOTAL</span>
             <span>priceless</span>
           </div>
+          <p className="receipt-foot">Thank you for shopping where money fails.</p>
+          <p className="receipt-foot">Keep this receipt. No returns. No refunds. No leaving.</p>
         </motion.div>
       ) : (
         <>
