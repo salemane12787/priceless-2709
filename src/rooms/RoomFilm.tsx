@@ -9,7 +9,6 @@ interface Props {
 function filmCandidates(): string[] {
   const base = import.meta.env.BASE_URL || '/';
   return [
-    'https://cdn.jsdelivr.net/gh/salemane12787/priceless-2709@main/film.mp4',
     new URL('film.mp4', window.location.origin + base).href,
     'https://raw.githubusercontent.com/salemane12787/priceless-2709/main/film.mp4',
   ];
