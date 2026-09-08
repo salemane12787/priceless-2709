@@ -16,9 +16,12 @@ function ensureAudio() {
 function ensureTheme() {
   if (!theme) {
     theme = new Audio(THEME_SRC);
-    theme.loop = true;
+    theme.loop = false;
     theme.preload = 'auto';
     theme.volume = 0.85;
+    theme.addEventListener('ended', () => {
+      musicOn = false;
+    });
   }
   return theme;
 }
