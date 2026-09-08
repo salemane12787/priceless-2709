@@ -1,8 +1,10 @@
 let ctx: AudioContext | null = null;
 let theme: HTMLAudioElement | null = null;
 let musicOn = false;
+let playToken = 0;
 
-const THEME_SRC = `${import.meta.env.BASE_URL || '/'}blow-theme.mp3`;
+/** cache-bust so browsers don't reuse an old looping audio element behavior */
+const THEME_SRC = `${import.meta.env.BASE_URL || '/'}blow-theme.mp3?v=once2`;
 
 function ensureAudio() {
   if (!ctx) {
@@ -16,30 +18,49 @@ function ensureAudio() {
 function ensureTheme() {
   if (!theme) {
     theme = new Audio(THEME_SRC);
-    theme.loop = false;
     theme.preload = 'auto';
     theme.volume = 0.85;
+    theme.loop = false;
+    theme.setAttribute('loop', 'false');
+    theme.removeAttribute('loop');
     theme.addEventListener('ended', () => {
       musicOn = false;
+      if (theme) {
+        theme.pause();
+        theme.currentTime = 0;
+        theme.loop = false;
+      }
     });
   }
+  theme.loop = false;
   return theme;
 }
 
 export function startMusic() {
   ensureAudio();
   const audio = ensureTheme();
-  if (musicOn && !audio.paused) return;
+  audio.loop = false;
+
+  // already playing this one-shot — don't restart
+  if (musicOn && !audio.paused && !audio.ended) return;
+
+  const token = ++playToken;
+  audio.currentTime = 0;
   void audio.play().then(() => {
+    if (token !== playToken) return;
+    audio.loop = false;
     musicOn = true;
   }).catch(() => {
+    if (token !== playToken) return;
     musicOn = false;
   });
   musicOn = true;
 }
 
 export function stopMusic() {
+  playToken += 1;
   if (theme) {
+    theme.loop = false;
     theme.pause();
     theme.currentTime = 0;
   }
@@ -47,7 +68,7 @@ export function stopMusic() {
 }
 
 export function isMusicOn() {
-  return musicOn && !!theme && !theme.paused;
+  return musicOn && !!theme && !theme.paused && !theme.ended;
 }
 
 export function whoosh() {
