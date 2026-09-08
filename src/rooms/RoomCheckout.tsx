@@ -89,16 +89,16 @@ export default function RoomCheckout({ onContinue, onRestart }: Props) {
               I couldn’t give you something in person, so I made this instead.
             </p>
             <p>
-              I still think about how random it was. TikTok. A hello. Then somehow you stayed in my head like you belonged there. I didn’t plan you. I just found you — and I didn’t want to let that go.
+              still think about how weird it is that we met on tiktok and somehow you just stayed. like i wasn’t looking for anything and then it was you. and i didn’t wanna lose that.
             </p>
             <p>
-              Even with the distance, you feel close. When I ask where you are, when we talk for too long, when you make me smile for no reason… that’s you. That’s us. 1 + 1 = 3, remember? Logic never stood a chance.
+              even with the distance you feel close. the talks, the dumb jokes, asking where u are for no reason. that’s my favorite part of the day honestly. 1+1=3 and i’m not arguing with that.
             </p>
             <p>
-              You’re my priceless girl. Not because it’s a cute word — because nothing I could buy would ever match what you are to me. No receipt. No price. Just you.
+              you’re my priceless girl. not as a nickname only. i mean it. nothing i could buy would feel like you.
             </p>
             <p>
-              Happy birthday, Firdaous. I wish I could be there to say it to your face. Until then, take this: I’m glad it was you. I’m still here. And I’m not going anywhere.
+              happy birthday firdaous. i wish i was there to say it to your face. until then, know this: i’m glad it’s you. i’m still here. i’m not going anywhere.
             </p>
             <p className="sign">Salmane</p>
             <p className="sign-note">written by salmane not a fucking dumb ai</p>
