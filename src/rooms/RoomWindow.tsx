@@ -10,7 +10,8 @@ interface Props {
 export default function RoomWindow({ onComplete }: Props) {
   const [blown, setBlown] = useState(false);
   const [wind, setWind] = useState(false);
-  const [hint, setHint] = useState('blow into the mic, or just tap the button');
+  const [showButton, setShowButton] = useState(false);
+  const [hint, setHint] = useState('blow into your mic');
   const done = useRef(false);
   const streamRef = useRef<MediaStream | null>(null);
   const rafRef = useRef(0);
@@ -34,12 +35,19 @@ export default function RoomWindow({ onComplete }: Props) {
   };
 
   useEffect(() => {
+    const buttonTimer = window.setTimeout(() => {
+      if (done.current) return;
+      setShowButton(true);
+      setHint((h) => (h.includes('tap') ? h : 'still nothing? tap the button'));
+    }, 10000);
+
     let streak = 0;
     let cancelled = false;
 
     async function listen() {
       if (!navigator.mediaDevices?.getUserMedia) {
-        setHint('mic unavailable — tap to open');
+        setShowButton(true);
+        setHint('mic unavailable — tap the button');
         return;
       }
       try {
@@ -100,13 +108,15 @@ export default function RoomWindow({ onComplete }: Props) {
         };
         rafRef.current = requestAnimationFrame(tick);
       } catch {
-        setHint('mic blocked — tap to open');
+        setShowButton(true);
+        setHint('mic blocked — tap the button');
       }
     }
 
     void listen();
     return () => {
       cancelled = true;
+      window.clearTimeout(buttonTimer);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       streamRef.current?.getTracks().forEach((t) => t.stop());
     };
@@ -132,9 +142,17 @@ export default function RoomWindow({ onComplete }: Props) {
         <div className="layer" />
       </div>
 
-      <button type="button" className="primary-btn" disabled={blown} onClick={finish}>
-        Blow out the candles
-      </button>
+      {showButton && !blown && (
+        <motion.button
+          type="button"
+          className="primary-btn"
+          onClick={finish}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          Blow out the candles
+        </motion.button>
+      )}
       <p className="hint">{hint}</p>
     </motion.div>
   );
