@@ -86,10 +86,19 @@ export default function RoomCheckout({ onContinue, onRestart }: Props) {
           >
             <p>Firdaous,</p>
             <p>
-              I couldn’t give you something in person, so I made this instead.
+              No box. No address. Just this: you became the softest part of my days from far away.
             </p>
             <p>
-              Happy birthday. You’re my priceless girl. Glad it’s you. I’m not going anywhere.
+              I still think about how random it was. TikTok. A hello. Then somehow you stayed in my head like you belonged there. I didn’t plan you. I just found you — and I didn’t want to let that go.
+            </p>
+            <p>
+              Even with the distance, you feel close. When I ask where you are, when we talk for too long, when you make me smile for no reason… that’s you. That’s us. 1 + 1 = 3, remember? Logic never stood a chance.
+            </p>
+            <p>
+              You’re my priceless girl. Not because it’s a cute word — because nothing I could buy would ever match what you are to me. No receipt. No price. Just you.
+            </p>
+            <p>
+              Happy birthday, Firdaous. I wish I could be there to say it to your face. Until then, take this: I’m glad it was you. I’m still here. And I’m not going anywhere.
             </p>
             <p className="sign">Salmane</p>
             <p className="sign-note">written by salmane not a fucking dumb ai</p>
