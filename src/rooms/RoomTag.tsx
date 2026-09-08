@@ -45,9 +45,9 @@ export default function RoomTag({ onComplete }: Props) {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, x: -40 }}
     >
-      <p className="kicker">Aisle 1 · Tags</p>
-      <h2>Rip the fake price</h2>
-      <p className="lead">Drag the tag off the box. Money was never invited.</p>
+      <p className="kicker">1 / 7</p>
+      <h2>You’re not for sale</h2>
+      <p className="lead">This gift has a fake $999 tag. Drag it off.</p>
 
       {!ripped ? (
         <div
@@ -59,7 +59,7 @@ export default function RoomTag({ onComplete }: Props) {
           style={{ transform: `translate(${offset.x}px, ${offset.y}px) rotate(${offset.x * 0.05}deg)` }}
         >
           <div className="amount">$999</div>
-          <div className="sub">drag me away →</div>
+          <div className="sub">drag this off →</div>
         </div>
       ) : (
         <motion.div
@@ -71,7 +71,7 @@ export default function RoomTag({ onComplete }: Props) {
         </motion.div>
       )}
 
-      <p className="hint">{ripped ? 'that’s better' : 'swipe / drag the tag'}</p>
+      <p className="hint">{ripped ? 'yeah. that’s you.' : 'hold and drag the tag'}</p>
     </motion.div>
   );
 }

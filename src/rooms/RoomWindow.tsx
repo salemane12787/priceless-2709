@@ -10,7 +10,7 @@ interface Props {
 export default function RoomWindow({ onComplete }: Props) {
   const [blown, setBlown] = useState(false);
   const [wind, setWind] = useState(false);
-  const [hint, setHint] = useState('blow into your mic — or tap');
+  const [hint, setHint] = useState('blow into the mic, or just tap the button');
   const done = useRef(false);
   const streamRef = useRef<MediaStream | null>(null);
   const rafRef = useRef(0);
@@ -23,7 +23,7 @@ export default function RoomWindow({ onComplete }: Props) {
     streamRef.current = null;
     setBlown(true);
     setWind(false);
-    setHint('welcome in…');
+    setHint('okay…');
     try {
       whoosh();
       startMusic();
@@ -120,9 +120,9 @@ export default function RoomWindow({ onComplete }: Props) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -16 }}
     >
-      <p className="kicker">PRICELESS</p>
-      <h1>a shop for Firdaous</h1>
-      <p className="lead">Nothing here has a price. That’s the point.</p>
+      <p className="kicker">27 · 09 · 2026</p>
+      <h1>Happy birthday<br /><span style={{ color: 'var(--coral, #ff7a6b)' }}>Firdaous</span></h1>
+      <p className="lead">I made you something. Blow the candles to open it.</p>
 
       <div className={`cake ${blown ? 'blown' : ''} ${wind ? 'wind' : ''}`} aria-hidden>
         <div className="candle c1"><i className="flame" /></div>

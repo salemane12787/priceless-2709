@@ -18,7 +18,7 @@ export default function RoomCalc({ onComplete }: Props) {
     if (done) return;
     if (n === 3) {
       setScreen('1 + 1 = 3 ✦');
-      setReact('Math who? Correct energy.');
+      setReact('Yeah. Us.');
       setBad(false);
       setDone(true);
       burst(true);
@@ -27,7 +27,7 @@ export default function RoomCalc({ onComplete }: Props) {
       return;
     }
     setScreen(`1 + 1 = ${n} ???`);
-    setReact(n === 2 ? 'Too logical. Be unserious.' : 'Chaotic… but wrong.');
+    setReact(n === 2 ? 'Boring. Try again.' : 'Nope.');
     setBad(true);
     setShake(true);
     window.setTimeout(() => setShake(false), 400);
@@ -40,9 +40,9 @@ export default function RoomCalc({ onComplete }: Props) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
     >
-      <p className="kicker">Aisle 3 · Broken tech</p>
-      <h2>Fix the calculator</h2>
-      <p className="lead">It’s glitching on purpose. Join the glitch.</p>
+      <p className="kicker">3 / 7</p>
+      <h2>1 + 1 = ?</h2>
+      <p className="lead">In our world, the answer isn’t 2.</p>
 
       <div className="calc-shell">
         <div className="calc-screen">{screen}</div>

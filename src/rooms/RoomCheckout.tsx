@@ -27,8 +27,8 @@ export default function RoomCheckout({ onContinue, onRestart }: Props) {
       animate={{ opacity: 1 }}
       style={{ justifyContent: 'flex-start', overflowY: 'auto', paddingTop: 72 }}
     >
-      <p className="kicker">Checkout</p>
-      <h2>{stage === 'receipt' ? 'Printing receipt…' : 'Your only free thing'}</h2>
+      <p className="kicker">7 / 7</p>
+      <h2>{stage === 'receipt' ? 'What you unlocked' : 'A letter for you'}</h2>
 
       {stage === 'receipt' ? (
         <motion.div
@@ -37,59 +37,45 @@ export default function RoomCheckout({ onContinue, onRestart }: Props) {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.55 }}
         >
-          <div className="shop-name">PRICELESS</div>
-          <p className="receipt-meta">a shop for Firdaous · 27.09.2026</p>
-          <p className="receipt-meta">Cashier: Salmane · Payment: none</p>
+          <div className="shop-name">FOR FIRDAOUS</div>
+          <p className="receipt-meta">from Salmane · 27.09.2026</p>
           <div className="receipt-rule" />
 
           <div className="receipt-row">
-            <span>1× ripped fake price tag</span>
-            <span>∞</span>
+            <span>you’re priceless</span>
+            <span>✓</span>
           </div>
           <div className="receipt-row">
-            <span>1× TikTok hello (origin)</span>
-            <span>∞</span>
+            <span>we met on TikTok</span>
+            <span>✓</span>
           </div>
           <div className="receipt-row">
-            <span>1× broken calculator (1+1=3)</span>
-            <span>∞</span>
+            <span>1 + 1 = 3</span>
+            <span>✓</span>
           </div>
           <div className="receipt-row">
-            <span>1× cleared mirror</span>
-            <span>∞</span>
+            <span>my name is Salmane</span>
+            <span>✓</span>
           </div>
           <div className="receipt-row">
-            <span>1× two-city almost-hug</span>
-            <span>∞</span>
+            <span>long distance, still us</span>
+            <span>✓</span>
           </div>
           <div className="receipt-row">
-            <span>3× do-not-open parcels</span>
-            <span>∞</span>
+            <span>three little notes</span>
+            <span>✓</span>
           </div>
           <div className="receipt-row">
-            <span>1× heart (long distance edition)</span>
-            <span>∞</span>
-          </div>
-          <div className="receipt-row">
-            <span>1× private film screening</span>
-            <span>∞</span>
+            <span>one short film</span>
+            <span>✓</span>
           </div>
 
           <div className="receipt-rule" />
-          <div className="receipt-row dim">
-            <span>Subtotal</span>
-            <span>not for sale</span>
-          </div>
-          <div className="receipt-row dim">
-            <span>Tax on feelings</span>
-            <span>0.00</span>
-          </div>
           <div className="line">
             <span>TOTAL</span>
-            <span>priceless</span>
+            <span>just you</span>
           </div>
-          <p className="receipt-foot">Thank you for shopping where money fails.</p>
-          <p className="receipt-foot">Keep this receipt. No returns. No refunds. No leaving.</p>
+          <p className="receipt-foot">No money. No returns. I’m staying.</p>
         </motion.div>
       ) : (
         <>
@@ -100,10 +86,10 @@ export default function RoomCheckout({ onContinue, onRestart }: Props) {
           >
             <p>Firdaous,</p>
             <p>
-              No box. No address. Just this: you became the softest part of my days from far away.
+              I couldn’t give you something in person, so I made this instead.
             </p>
             <p>
-              Happy birthday, my priceless girl. I’m glad it was you. I’m not going anywhere.
+              Happy birthday. You’re my priceless girl. Glad it’s you. I’m not going anywhere.
             </p>
             <p className="sign">Salmane</p>
             <p className="sign-note">written by salmane not a fucking dumb ai</p>
@@ -112,15 +98,15 @@ export default function RoomCheckout({ onContinue, onRestart }: Props) {
           <div style={{ display: 'grid', gap: 10, marginTop: 8 }}>
             {onContinue && (
               <button type="button" className="primary-btn" onClick={onContinue}>
-                Open the film →
+                Watch the film →
               </button>
             )}
             <button type="button" className="ghost-btn" onClick={() => sideCannons()}>
-              Throw more confetti
+              More confetti
             </button>
             {onRestart && (
               <button type="button" className="ghost-btn" onClick={onRestart}>
-                Walk the shop again
+                Start over
               </button>
             )}
           </div>

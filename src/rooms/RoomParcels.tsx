@@ -35,7 +35,7 @@ export default function RoomParcels({ onComplete }: Props) {
       burst();
       markOpen('miss');
     } else {
-      setErr('Nope — think first hello.');
+      setErr('Nope. Think about how we met.');
     }
   };
 
@@ -68,7 +68,7 @@ export default function RoomParcels({ onComplete }: Props) {
       burst();
       markOpen('bday');
     } else {
-      setErr('The day this whole shop exists for.');
+      setErr('Wrong day. Hint: your birthday date.');
     }
   };
 
@@ -80,13 +80,13 @@ export default function RoomParcels({ onComplete }: Props) {
       exit={{ opacity: 0 }}
       style={{ justifyContent: 'flex-start', overflowY: 'auto' }}
     >
-      <p className="kicker">Counter · Do not open</p>
-      <h2>Three parcels</h2>
-      <p className="lead">Each one opens differently. Short notes only.</p>
+      <p className="kicker">6 / 7</p>
+      <h2>Three little notes</h2>
+      <p className="lead">Open all three. Each one works differently.</p>
 
       <div className="parcel-list">
         <article className="parcel">
-          <h3>Open when you miss me</h3>
+          <h3>When you miss me</h3>
           {!opened.miss ? (
             <>
               <p>Where did we first meet?</p>
@@ -97,15 +97,15 @@ export default function RoomParcels({ onComplete }: Props) {
               </div>
             </>
           ) : (
-            <p className="note">I’m still here. Different city. Same person. Text me — even just “hru.”</p>
+            <p className="note">I’m still here. Different city, same me. Text me — even just “hru.”</p>
           )}
         </article>
 
         <article className="parcel">
-          <h3>Open when you need a laugh</h3>
+          <h3>When you need a laugh</h3>
           {!opened.laugh ? (
             <>
-              <p>Hold to unwrap.</p>
+              <p>Press and hold to open.</p>
               <button
                 type="button"
                 className="hold-btn"
@@ -115,19 +115,19 @@ export default function RoomParcels({ onComplete }: Props) {
                 onPointerCancel={endHold}
               >
                 <div className="fill" style={{ width: `${holdPct}%` }} />
-                <span>{holdPct >= 100 ? 'Unwrapped' : 'Hold…'}</span>
+                <span>{holdPct >= 100 ? 'Opened' : 'Hold…'}</span>
               </button>
             </>
           ) : (
-            <p className="note">We survived worse jokes than today. Send the dumbest meme. I’ll match it.</p>
+            <p className="note">Send me the dumbest meme you have. I’ll send one back.</p>
           )}
         </article>
 
         <article className="parcel">
-          <h3>Open on your birthday</h3>
+          <h3>On your birthday</h3>
           {!opened.bday ? (
             <form onSubmit={submitBday} style={{ display: 'grid', gap: 8 }}>
-              <p>What day? (number)</p>
+              <p>What day of the month is your birthday?</p>
               <input
                 value={bdayVal}
                 onChange={(e) => setBdayVal(e.target.value)}
@@ -140,16 +140,16 @@ export default function RoomParcels({ onComplete }: Props) {
                   padding: '10px 12px',
                 }}
               />
-              <button type="submit" className="primary-btn">Unlock</button>
+              <button type="submit" className="primary-btn">Open</button>
             </form>
           ) : (
-            <p className="note">Happy birthday. Glad we met across the distance. Today is yours.</p>
+            <p className="note">Happy birthday. Glad we found each other across the distance. Today is yours.</p>
           )}
         </article>
       </div>
 
       <p className={`react-line ${err ? 'bad' : ''}`}>
-        {err || (allOpen ? 'Counter cleared. Checkout waits.' : `${Number(opened.miss) + Number(opened.laugh) + Number(opened.bday)}/3 opened`)}
+        {err || (allOpen ? 'All open. One last thing…' : `${Number(opened.miss) + Number(opened.laugh) + Number(opened.bday)}/3 opened`)}
       </p>
     </motion.div>
   );

@@ -56,8 +56,8 @@ export default function App() {
 
       <header className="shop-bar">
         <div className="brand-pill">
-          <strong>PRICELESS</strong>
-          <span>a shop for Firdaous</span>
+          <strong>FOR FIRDAOUS</strong>
+          <span>from Salmane</span>
         </div>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <div className="bags" aria-hidden>

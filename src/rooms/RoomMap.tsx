@@ -10,7 +10,7 @@ export default function RoomMap({ onComplete }: Props) {
   const boardRef = useRef<HTMLDivElement>(null);
   const [her, setHer] = useState({ x: 28, y: 42 });
   const [him] = useState({ x: 72, y: 58 });
-  const [react, setReact] = useState('Drag her pin closer.');
+  const [react, setReact] = useState('Drag your pin closer to mine.');
   const [done, setDone] = useState(false);
   const dragging = useRef(false);
 
@@ -43,16 +43,16 @@ export default function RoomMap({ onComplete }: Props) {
     setHer(next);
     const nd = Math.hypot(next.x - him.x, next.y - him.y);
     if (nd < 22) {
-      setReact('Almost. Not yet. Still counting.');
+      setReact('Closer… but not the same city yet.');
       if (!done) {
         setDone(true);
         burst();
         window.setTimeout(onComplete, 1200);
       }
     } else if (nd < 40) {
-      setReact('Closer…');
+      setReact('Getting closer…');
     } else {
-      setReact('Drag her pin closer.');
+      setReact('Drag your pin closer to mine.');
     }
   };
 
@@ -67,9 +67,9 @@ export default function RoomMap({ onComplete }: Props) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
     >
-      <p className="kicker">Aisle 5 · Distance</p>
-      <h2>Two cities</h2>
-      <p className="lead">Pull them close. They won’t fully meet — not tonight.</p>
+      <p className="kicker">5 / 7</p>
+      <h2>We’re far</h2>
+      <p className="lead">Drag your pin closer to me. We can’t fully meet yet — that’s long distance.</p>
 
       <div
         ref={boardRef}
@@ -93,7 +93,7 @@ export default function RoomMap({ onComplete }: Props) {
         </div>
       </div>
       <p className="react-line">{react}</p>
-      <p className="hint">gap: {Math.round(dist)}</p>
+      <p className="hint">distance left: {Math.round(dist)}</p>
     </motion.div>
   );
 }

@@ -21,13 +21,13 @@ export default function RoomMirror({ onComplete }: Props) {
     const v = normalize(value);
     if (v.includes('salmane') || v.includes('salman')) {
       setClear(true);
-      setReact('Fog lifted.');
+      setReact('There you go.');
       setBad(false);
       burst();
       chime();
       window.setTimeout(onComplete, 1200);
     } else {
-      setReact('Hmm… wipe again (starts with S)');
+      setReact('Wrong. Hint: starts with S.');
       setBad(true);
       setShake(true);
       window.setTimeout(() => setShake(false), 400);
@@ -41,13 +41,13 @@ export default function RoomMirror({ onComplete }: Props) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <p className="kicker">Aisle 4 · Fitting room</p>
-      <h2>Wipe the fog</h2>
-      <p className="lead">The boy who built this shop is behind the glass. Type his name.</p>
+      <p className="kicker">4 / 7</p>
+      <h2>Who made this for you?</h2>
+      <p className="lead">Type my name to clear the mirror.</p>
 
       <div className={`mirror ${clear ? 'clear' : ''}`}>
         <div className="fog" />
-        <div className="whisper">{clear ? 'Still here. — Salmane' : 'Who is he?'}</div>
+        <div className="whisper">{clear ? 'Still here. — Salmane' : '????'}</div>
       </div>
 
       {!clear && (
@@ -55,11 +55,11 @@ export default function RoomMirror({ onComplete }: Props) {
           <input
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="his name…"
+            placeholder="type the name…"
             autoCapitalize="off"
             autoComplete="off"
           />
-          <button type="submit" className="primary-btn">Clear the mirror</button>
+          <button type="submit" className="primary-btn">Check</button>
         </form>
       )}
       <p className={`react-line ${bad ? 'bad' : ''}`}>{react}</p>

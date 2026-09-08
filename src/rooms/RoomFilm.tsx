@@ -59,9 +59,9 @@ export default function RoomFilm({ onRestart }: Props) {
       animate={{ opacity: 1 }}
       style={{ justifyContent: 'flex-start', overflowY: 'auto', paddingTop: 72 }}
     >
-      <p className="kicker">Private screening</p>
-      <h2>The film</h2>
-      <p className="lead">Shop unlock complete. Press play — music stays locked to every frame.</p>
+      <p className="kicker">bonus</p>
+      <h2>A short film for you</h2>
+      <p className="lead">Press play when you’re ready.</p>
 
       <div className="film-frame">
         <video
@@ -107,7 +107,7 @@ export default function RoomFilm({ onRestart }: Props) {
         </a>
         {onRestart && (
           <button type="button" className="ghost-btn" onClick={onRestart}>
-            Back to the shop
+            Start over
           </button>
         )}
       </div>

@@ -7,9 +7,9 @@ interface Props {
 }
 
 const PRODUCTS = [
-  { id: 'mall', label: 'Random mall meetup', joke: 'Wrong aisle, babe.' },
-  { id: 'tiktok', label: 'TikTok hello', joke: '', correct: true },
-  { id: 'school', label: 'School cafeteria romance', joke: 'Cute. False.' },
+  { id: 'mall', label: 'We met at the mall', joke: 'Nope.' },
+  { id: 'tiktok', label: 'We met on TikTok', joke: '', correct: true },
+  { id: 'school', label: 'We met at school', joke: 'Wrong.' },
 ];
 
 export default function RoomAisle({ onComplete }: Props) {
@@ -69,7 +69,7 @@ export default function RoomAisle({ onComplete }: Props) {
       const product = PRODUCTS.find((p) => p.id === id)!;
       if (product.correct) {
         setInBasket(product.label);
-        setReact('Origin secured. Receipt updated.');
+        setReact('Yes. That’s how it started.');
         setBad(false);
         burst();
         resetDrag();
@@ -90,9 +90,9 @@ export default function RoomAisle({ onComplete }: Props) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
     >
-      <p className="kicker">Aisle 2 · Origins</p>
-      <h2>Drop the real start</h2>
-      <p className="lead">Drag the true first hello into the basket.</p>
+      <p className="kicker">2 / 7</p>
+      <h2>Where did we meet?</h2>
+      <p className="lead">Drag the right answer into the box below.</p>
 
       <div className="aisle-grid">
         {PRODUCTS.map((p) => {
@@ -115,7 +115,7 @@ export default function RoomAisle({ onComplete }: Props) {
                 transition: dragging ? 'none' : 'transform 0.2s ease',
               }}
             >
-              <div className="sku">SKU · MEMORY</div>
+              <div className="sku">pick one</div>
               {p.label}
             </div>
           );
@@ -126,9 +126,9 @@ export default function RoomAisle({ onComplete }: Props) {
         ref={basketRef}
         className={`basket ${hot ? 'hot' : ''} ${inBasket ? 'filled' : ''}`}
       >
-        {inBasket || 'drop here'}
+        {inBasket || 'drop the answer here'}
       </div>
-      <p className={`react-line ${bad ? 'bad' : ''}`}>{react || 'grab a card and drag it'}</p>
+      <p className={`react-line ${bad ? 'bad' : ''}`}>{react || 'hold a card and drag it'}</p>
     </motion.div>
   );
 }
