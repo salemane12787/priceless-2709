@@ -6,9 +6,13 @@ interface Props {
   onRestart?: () => void;
 }
 
-function filmSrc() {
+function filmCandidates(): string[] {
   const base = import.meta.env.BASE_URL || '/';
-  return new URL('film.mp4', window.location.origin + base).href;
+  return [
+    'https://cdn.jsdelivr.net/gh/salemane12787/priceless-2709@main/film.mp4',
+    new URL('film.mp4', window.location.origin + base).href,
+    'https://raw.githubusercontent.com/salemane12787/priceless-2709/main/film.mp4',
+  ];
 }
 
 export default function RoomFilm({ onRestart }: Props) {
@@ -17,7 +21,9 @@ export default function RoomFilm({ onRestart }: Props) {
   const [ended, setEnded] = useState(false);
   const [loadError, setLoadError] = useState(false);
   const [playHint, setPlayHint] = useState('');
-  const src = filmSrc();
+  const [srcIndex, setSrcIndex] = useState(0);
+  const candidates = filmCandidates();
+  const src = candidates[srcIndex];
 
   useEffect(() => {
     stopMusic();
@@ -28,8 +34,9 @@ export default function RoomFilm({ onRestart }: Props) {
     if (!v) return;
     setPlayHint('');
     try {
-      if (v.error) {
-        setLoadError(true);
+      if (v.error && srcIndex < candidates.length - 1) {
+        setSrcIndex((i) => i + 1);
+        setReady(false);
         return;
       }
       v.currentTime = 0;
@@ -37,7 +44,6 @@ export default function RoomFilm({ onRestart }: Props) {
       await v.play();
       setReady(true);
     } catch {
-      // Autoplay policies can block until a second tap; not a missing file.
       setPlayHint('Tap play again if it paused.');
       try {
         await v.play();
@@ -60,6 +66,7 @@ export default function RoomFilm({ onRestart }: Props) {
 
       <div className="film-frame">
         <video
+          key={src}
           ref={videoRef}
           className="film-video"
           src={src}
@@ -75,7 +82,15 @@ export default function RoomFilm({ onRestart }: Props) {
             setLoadError(false);
           }}
           onEnded={() => setEnded(true)}
-          onError={() => setLoadError(true)}
+          onError={() => {
+            if (srcIndex < candidates.length - 1) {
+              setSrcIndex((i) => i + 1);
+              setReady(false);
+              setLoadError(false);
+            } else {
+              setLoadError(true);
+            }
+          }}
         />
         <div className="film-scan" aria-hidden />
       </div>
@@ -85,7 +100,7 @@ export default function RoomFilm({ onRestart }: Props) {
           {ended ? 'Play again' : ready ? 'Play film' : 'Loading film…'}
         </button>
         {loadError && (
-          <p className="react-line bad">Film file missing on the server. Refresh in a minute.</p>
+          <p className="react-line bad">Film couldn’t load. Try the link below.</p>
         )}
         {playHint && !loadError && <p className="react-line">{playHint}</p>}
         <a className="ghost-btn" href={src} target="_blank" rel="noreferrer" style={{ textAlign: 'center' }}>
