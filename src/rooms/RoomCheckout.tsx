@@ -3,10 +3,11 @@ import { motion } from 'framer-motion';
 import { sideCannons, burst } from '../lib/confetti';
 
 interface Props {
+  onContinue?: () => void;
   onRestart?: () => void;
 }
 
-export default function RoomCheckout({ onRestart }: Props) {
+export default function RoomCheckout({ onContinue, onRestart }: Props) {
   const [stage, setStage] = useState<'receipt' | 'letter'>('receipt');
 
   useEffect(() => {
@@ -69,6 +70,10 @@ export default function RoomCheckout({ onRestart }: Props) {
             <span>1× heart (long distance edition)</span>
             <span>∞</span>
           </div>
+          <div className="receipt-row">
+            <span>1× private film screening</span>
+            <span>∞</span>
+          </div>
 
           <div className="receipt-rule" />
           <div className="receipt-row dim">
@@ -105,7 +110,12 @@ export default function RoomCheckout({ onRestart }: Props) {
           </motion.article>
 
           <div style={{ display: 'grid', gap: 10, marginTop: 8 }}>
-            <button type="button" className="primary-btn" onClick={() => sideCannons()}>
+            {onContinue && (
+              <button type="button" className="primary-btn" onClick={onContinue}>
+                Open the film →
+              </button>
+            )}
+            <button type="button" className="ghost-btn" onClick={() => sideCannons()}>
               Throw more confetti
             </button>
             {onRestart && (

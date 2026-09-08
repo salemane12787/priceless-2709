@@ -6,7 +6,8 @@ export type Room =
   | 'mirror'
   | 'map'
   | 'parcels'
-  | 'checkout';
+  | 'checkout'
+  | 'film';
 
 export const ROOM_ORDER: Room[] = [
   'window',
@@ -17,6 +18,7 @@ export const ROOM_ORDER: Room[] = [
   'map',
   'parcels',
   'checkout',
+  'film',
 ];
 
 export function nextRoom(current: Room): Room | null {

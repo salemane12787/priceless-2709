@@ -11,6 +11,7 @@ import RoomMirror from './rooms/RoomMirror';
 import RoomMap from './rooms/RoomMap';
 import RoomParcels from './rooms/RoomParcels';
 import RoomCheckout from './rooms/RoomCheckout';
+import RoomFilm from './rooms/RoomFilm';
 
 function initialRoom(): Room {
   const params = new URLSearchParams(window.location.search);
@@ -89,7 +90,14 @@ export default function App() {
         {room === 'map' && <RoomMap key="map" onComplete={goNext} />}
         {room === 'parcels' && <RoomParcels key="parcels" onComplete={goNext} />}
         {room === 'checkout' && (
-          <RoomCheckout key="checkout" onRestart={() => setRoom('window')} />
+          <RoomCheckout
+            key="checkout"
+            onContinue={goNext}
+            onRestart={() => setRoom('window')}
+          />
+        )}
+        {room === 'film' && (
+          <RoomFilm key="film" onRestart={() => setRoom('window')} />
         )}
       </AnimatePresence>
     </div>
