@@ -6,11 +6,18 @@ interface Props {
   onRestart?: () => void;
 }
 
+function filmSrc() {
+  const base = import.meta.env.BASE_URL || '/';
+  return new URL('film.mp4', window.location.origin + base).href;
+}
+
 export default function RoomFilm({ onRestart }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [ready, setReady] = useState(false);
   const [ended, setEnded] = useState(false);
-  const [error, setError] = useState(false);
+  const [loadError, setLoadError] = useState(false);
+  const [playHint, setPlayHint] = useState('');
+  const src = filmSrc();
 
   useEffect(() => {
     stopMusic();
@@ -19,13 +26,24 @@ export default function RoomFilm({ onRestart }: Props) {
   const play = async () => {
     const v = videoRef.current;
     if (!v) return;
+    setPlayHint('');
     try {
+      if (v.error) {
+        setLoadError(true);
+        return;
+      }
       v.currentTime = 0;
       setEnded(false);
       await v.play();
       setReady(true);
     } catch {
-      setError(true);
+      // Autoplay policies can block until a second tap; not a missing file.
+      setPlayHint('Tap play again if it paused.');
+      try {
+        await v.play();
+      } catch {
+        setPlayHint('Tap the video, then Play film.');
+      }
     }
   };
 
@@ -44,23 +62,35 @@ export default function RoomFilm({ onRestart }: Props) {
         <video
           ref={videoRef}
           className="film-video"
-          src={`${import.meta.env.BASE_URL}film.mp4`}
+          src={src}
           playsInline
+          controls
           preload="auto"
+          onCanPlay={() => {
+            setReady(true);
+            setLoadError(false);
+          }}
+          onLoadedData={() => {
+            setReady(true);
+            setLoadError(false);
+          }}
           onEnded={() => setEnded(true)}
-          onLoadedData={() => setReady(true)}
-          onError={() => setError(true)}
+          onError={() => setLoadError(true)}
         />
         <div className="film-scan" aria-hidden />
       </div>
 
       <div style={{ display: 'grid', gap: 10, marginTop: 14, width: 'min(100%, 360px)' }}>
-        <button type="button" className="primary-btn" onClick={play}>
-          {ended ? 'Play again' : ready ? 'Play film' : 'Loading…'}
+        <button type="button" className="primary-btn" onClick={play} disabled={loadError && !ready}>
+          {ended ? 'Play again' : ready ? 'Play film' : 'Loading film…'}
         </button>
-        {error && (
-          <p className="react-line bad">Couldn’t load the film. Hard refresh and try again.</p>
+        {loadError && (
+          <p className="react-line bad">Film file missing on the server. Refresh in a minute.</p>
         )}
+        {playHint && !loadError && <p className="react-line">{playHint}</p>}
+        <a className="ghost-btn" href={src} target="_blank" rel="noreferrer" style={{ textAlign: 'center' }}>
+          Open film in a new tab
+        </a>
         {onRestart && (
           <button type="button" className="ghost-btn" onClick={onRestart}>
             Back to the shop

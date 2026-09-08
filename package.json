@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node -e \"require('fs').copyFileSync('index.dev.html','index.html')\" && vite",
-    "build": "node -e \"require('fs').copyFileSync('index.dev.html','index.html')\" && vite build && node -e \"const fs=require('fs'); fs.copyFileSync('docs/index.html','index.html'); fs.cpSync('docs/assets','assets',{recursive:true}); if(fs.existsSync('docs/robots.txt')) fs.copyFileSync('docs/robots.txt','robots.txt'); else if(fs.existsSync('robots.txt')) fs.copyFileSync('robots.txt','docs/robots.txt');\"",
+    "build": "node -e \"require('fs').copyFileSync('index.dev.html','index.html')\" && vite build && node -e \"const fs=require('fs'); fs.copyFileSync('docs/index.html','index.html'); fs.cpSync('docs/assets','assets',{recursive:true}); if(fs.existsSync('docs/film.mp4')) fs.copyFileSync('docs/film.mp4','film.mp4'); if(fs.existsSync('docs/robots.txt')) fs.copyFileSync('docs/robots.txt','robots.txt'); else if(fs.existsSync('robots.txt')) fs.copyFileSync('robots.txt','docs/robots.txt');\"",
     "preview": "vite preview"
   },
   "dependencies": {
