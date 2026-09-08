@@ -86,7 +86,7 @@ export default function RoomCheckout({ onContinue, onRestart }: Props) {
           >
             <p>Firdaous,</p>
             <p>
-              No box. No address. Just this: you became the softest part of my days from far away.
+              I couldn’t give you something in person, so I made this instead.
             </p>
             <p>
               I still think about how random it was. TikTok. A hello. Then somehow you stayed in my head like you belonged there. I didn’t plan you. I just found you — and I didn’t want to let that go.
