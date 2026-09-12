@@ -13,6 +13,7 @@ export default function RoomMap({ onComplete }: Props) {
   const [react, setReact] = useState('Drag your pin closer to mine.');
   const [done, setDone] = useState(false);
   const dragging = useRef(false);
+  const doneRef = useRef(false);
 
   const dist = Math.hypot(her.x - him.x, her.y - him.y);
 
@@ -24,6 +25,26 @@ export default function RoomMap({ onComplete }: Props) {
     };
   };
 
+  const pullClose = () => {
+    if (done) return;
+    const angle = Math.atan2(her.y - him.y, her.x - him.x);
+    const next = {
+      x: him.x + Math.cos(angle) * 16,
+      y: him.y + Math.sin(angle) * 16,
+    };
+    setHer(next);
+    finishClose();
+  };
+
+  const finishClose = () => {
+    if (doneRef.current) return;
+    doneRef.current = true;
+    setReact('Closer… but not the same city yet.');
+    setDone(true);
+    burst();
+    window.setTimeout(onComplete, 1200);
+  };
+
   const onPointerDown = (e: React.PointerEvent) => {
     if (done) return;
     dragging.current = true;
@@ -33,7 +54,6 @@ export default function RoomMap({ onComplete }: Props) {
   const onPointerMove = (e: React.PointerEvent) => {
     if (!dragging.current || done || !boardRef.current) return;
     const next = toPct(e.clientX, e.clientY);
-    // Soft clamp: can't fully merge
     const d = Math.hypot(next.x - him.x, next.y - him.y);
     if (d < 14) {
       const angle = Math.atan2(next.y - him.y, next.x - him.x);
@@ -43,12 +63,7 @@ export default function RoomMap({ onComplete }: Props) {
     setHer(next);
     const nd = Math.hypot(next.x - him.x, next.y - him.y);
     if (nd < 22) {
-      setReact('Closer… but not the same city yet.');
-      if (!done) {
-        setDone(true);
-        burst();
-        window.setTimeout(onComplete, 1200);
-      }
+      finishClose();
     } else if (nd < 40) {
       setReact('Getting closer…');
     } else {
@@ -69,7 +84,7 @@ export default function RoomMap({ onComplete }: Props) {
     >
       <p className="kicker">5 / 7</p>
       <h2>We’re far</h2>
-      <p className="lead">Drag your pin closer to me. We can’t fully meet yet — that’s long distance.</p>
+      <p className="lead">Drag your pin closer to me, or tap the button. We can’t fully meet yet — that’s long distance.</p>
 
       <div
         ref={boardRef}
@@ -84,14 +99,21 @@ export default function RoomMap({ onComplete }: Props) {
         >
           <span>him</span>
         </div>
-        <div
+        <button
+          type="button"
           className="pin her"
           style={{ left: `${her.x}%`, top: `${her.y}%` }}
           onPointerDown={onPointerDown}
+          aria-label="Your pin. Drag closer, or use the button below."
         >
           <span>you</span>
-        </div>
+        </button>
       </div>
+      {!done && (
+        <button type="button" className="ghost-btn" onClick={pullClose}>
+          Come closer
+        </button>
+      )}
       <p className="react-line">{react}</p>
       <p className="hint">distance left: {Math.round(dist)}</p>
     </motion.div>

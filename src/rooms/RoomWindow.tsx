@@ -5,9 +5,11 @@ import { sideCannons } from '../lib/confetti';
 
 interface Props {
   onComplete: () => void;
+  showResume?: boolean;
+  onResume?: () => void;
 }
 
-export default function RoomWindow({ onComplete }: Props) {
+export default function RoomWindow({ onComplete, showResume, onResume }: Props) {
   const [blown, setBlown] = useState(false);
   const [wind, setWind] = useState(false);
   const [showButton, setShowButton] = useState(false);
@@ -152,6 +154,11 @@ export default function RoomWindow({ onComplete }: Props) {
         >
           Blow out the candles
         </motion.button>
+      )}
+      {showResume && onResume && !blown && (
+        <button type="button" className="ghost-btn" onClick={onResume} style={{ marginTop: 10 }}>
+          Resume
+        </button>
       )}
       <p className="hint">{hint}</p>
     </motion.div>

@@ -1,31 +1,34 @@
 import { FormEvent, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { normalize } from '../types';
+import { compactText, normalize } from '../types';
 import { burst } from '../lib/confetti';
+import { ParcelState } from '../lib/progress';
 
 interface Props {
   onComplete: () => void;
+  opened: ParcelState;
+  onOpenedChange: (next: ParcelState) => void;
 }
 
-export default function RoomParcels({ onComplete }: Props) {
-  const [opened, setOpened] = useState({ miss: false, laugh: false, bday: false });
-  const [holdPct, setHoldPct] = useState(0);
+export default function RoomParcels({ onComplete, opened, onOpenedChange }: Props) {
+  const [holdPct, setHoldPct] = useState(opened.laugh ? 100 : 0);
   const [bdayVal, setBdayVal] = useState('');
   const [err, setErr] = useState('');
   const holdTimer = useRef<number | null>(null);
   const holdStart = useRef(0);
+  const allOpenOnLoad = useRef(opened.miss && opened.laugh && opened.bday);
 
+  const completed = useRef(allOpenOnLoad.current);
   const allOpen = opened.miss && opened.laugh && opened.bday;
 
   const markOpen = (key: 'miss' | 'laugh' | 'bday') => {
-    setOpened((prev) => {
-      const next = { ...prev, [key]: true };
-      if (next.miss && next.laugh && next.bday) {
-        burst(true);
-        window.setTimeout(onComplete, 900);
-      }
-      return next;
-    });
+    const next = { ...opened, [key]: true };
+    onOpenedChange(next);
+    if (next.miss && next.laugh && next.bday && !completed.current) {
+      completed.current = true;
+      burst(true);
+      window.setTimeout(onComplete, 900);
+    }
   };
 
   const openMiss = (choice: string) => {
@@ -39,17 +42,24 @@ export default function RoomParcels({ onComplete }: Props) {
     }
   };
 
+  const openLaugh = () => {
+    if (opened.laugh) return;
+    if (holdTimer.current) clearInterval(holdTimer.current);
+    setHoldPct(100);
+    burst();
+    markOpen('laugh');
+  };
+
   const startHold = () => {
     if (opened.laugh) return;
     holdStart.current = Date.now();
+    if (holdTimer.current) clearInterval(holdTimer.current);
     holdTimer.current = window.setInterval(() => {
       const pct = Math.min(100, ((Date.now() - holdStart.current) / 1200) * 100);
       setHoldPct(pct);
       if (pct >= 100) {
         if (holdTimer.current) clearInterval(holdTimer.current);
-        setHoldPct(100);
-        burst();
-        markOpen('laugh');
+        openLaugh();
       }
     }, 40);
   };
@@ -59,11 +69,19 @@ export default function RoomParcels({ onComplete }: Props) {
     if (!opened.laugh) setHoldPct(0);
   };
 
+  const onHoldKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openLaugh();
+    }
+  };
+
   const submitBday = (e: FormEvent) => {
     e.preventDefault();
     if (opened.bday) return;
     const v = normalize(bdayVal);
-    if (v === '27' || v.includes('twenty seven')) {
+    const compact = compactText(bdayVal);
+    if (compact === '27' || v === '27' || v.includes('twenty seven')) {
       setErr('');
       burst();
       markOpen('bday');
@@ -105,17 +123,22 @@ export default function RoomParcels({ onComplete }: Props) {
           <h3>When you need a laugh</h3>
           {!opened.laugh ? (
             <>
-              <p>Press and hold to open.</p>
+              <p>Press and hold, or open it the normal way.</p>
               <button
                 type="button"
                 className="hold-btn"
+                aria-label="Hold to open, or press Enter"
                 onPointerDown={startHold}
                 onPointerUp={endHold}
                 onPointerLeave={endHold}
                 onPointerCancel={endHold}
+                onKeyDown={onHoldKeyDown}
               >
                 <div className="fill" style={{ width: `${holdPct}%` }} />
-                <span>{holdPct >= 100 ? 'Opened' : 'Hold…'}</span>
+                <span>{holdPct >= 100 ? 'Opened' : `Hold… ${Math.round(holdPct)}%`}</span>
+              </button>
+              <button type="button" className="ghost-btn" onClick={openLaugh} style={{ marginTop: 8, width: '100%' }}>
+                Open
               </button>
             </>
           ) : (
@@ -132,6 +155,7 @@ export default function RoomParcels({ onComplete }: Props) {
                 value={bdayVal}
                 onChange={(e) => setBdayVal(e.target.value)}
                 placeholder="27"
+                inputMode="numeric"
                 style={{
                   border: '1px solid var(--line)',
                   background: '#3a2a36',
@@ -151,6 +175,11 @@ export default function RoomParcels({ onComplete }: Props) {
       <p className={`react-line ${err ? 'bad' : ''}`}>
         {err || (allOpen ? 'All open. One last thing…' : `${Number(opened.miss) + Number(opened.laugh) + Number(opened.bday)}/3 opened`)}
       </p>
+      {allOpenOnLoad.current && (
+        <button type="button" className="primary-btn" onClick={onComplete} style={{ marginTop: 8 }}>
+          Continue
+        </button>
+      )}
     </motion.div>
   );
 }

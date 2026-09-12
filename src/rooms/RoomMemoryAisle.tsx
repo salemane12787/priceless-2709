@@ -23,6 +23,8 @@ export default function RoomAisle({ onComplete }: Props) {
   const start = useRef<{ x: number; y: number } | null>(null);
   const activeId = useRef<string | null>(null);
 
+  const locked = useRef(false);
+
   const overBasket = (clientX: number, clientY: number) => {
     if (!basketRef.current) return false;
     const rect = basketRef.current.getBoundingClientRect();
@@ -34,9 +36,26 @@ export default function RoomAisle({ onComplete }: Props) {
     );
   };
 
+  const choose = (id: string) => {
+    if (locked.current) return;
+    const product = PRODUCTS.find((p) => p.id === id)!;
+    if (product.correct) {
+      locked.current = true;
+      setInBasket(product.label);
+      setReact('Yes. That’s how it started.');
+      setBad(false);
+      burst();
+      resetDrag();
+      window.setTimeout(onComplete, 1000);
+      return;
+    }
+    setReact(product.joke);
+    setBad(true);
+    resetDrag();
+  };
+
   const onPointerDown = (id: string) => (e: React.PointerEvent) => {
     if (inBasket) return;
-    e.preventDefault();
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     activeId.current = id;
     setDragId(id);
@@ -63,21 +82,14 @@ export default function RoomAisle({ onComplete }: Props) {
   const onPointerUp = (e: React.PointerEvent) => {
     if (!activeId.current) return;
     const id = activeId.current;
+    const moved = start.current
+      ? Math.hypot(e.clientX - start.current.x, e.clientY - start.current.y)
+      : 0;
     const inside = overBasket(e.clientX, e.clientY);
 
-    if (inside) {
-      const product = PRODUCTS.find((p) => p.id === id)!;
-      if (product.correct) {
-        setInBasket(product.label);
-        setReact('Yes. That’s how it started.');
-        setBad(false);
-        burst();
-        resetDrag();
-        window.setTimeout(onComplete, 1000);
-        return;
-      }
-      setReact(product.joke);
-      setBad(true);
+    if (inside || moved < 12) {
+      choose(id);
+      return;
     }
 
     resetDrag();
@@ -92,19 +104,21 @@ export default function RoomAisle({ onComplete }: Props) {
     >
       <p className="kicker">2 / 7</p>
       <h2>Where did we meet?</h2>
-      <p className="lead">Drag the right answer into the box below.</p>
+      <p className="lead">Tap the right answer, or drag it into the box.</p>
 
       <div className="aisle-grid">
         {PRODUCTS.map((p) => {
           const dragging = dragId === p.id;
           return (
-            <div
+            <button
+              type="button"
               key={p.id}
               className={`product-card ${dragging ? 'dragging' : ''}`}
               onPointerDown={onPointerDown(p.id)}
               onPointerMove={onPointerMove}
               onPointerUp={onPointerUp}
               onPointerCancel={resetDrag}
+              disabled={!!inBasket}
               style={{
                 opacity: inBasket && p.id !== 'tiktok' ? 0.35 : 1,
                 transform: dragging
@@ -117,7 +131,7 @@ export default function RoomAisle({ onComplete }: Props) {
             >
               <div className="sku">pick one</div>
               {p.label}
-            </div>
+            </button>
           );
         })}
       </div>
@@ -128,7 +142,7 @@ export default function RoomAisle({ onComplete }: Props) {
       >
         {inBasket || 'drop the answer here'}
       </div>
-      <p className={`react-line ${bad ? 'bad' : ''}`}>{react || 'hold a card and drag it'}</p>
+      <p className={`react-line ${bad ? 'bad' : ''}`}>{react || 'tap a card, or drag it'}</p>
     </motion.div>
   );
 }

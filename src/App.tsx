@@ -1,8 +1,18 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import Background from './components/Background';
-import { Room, ROOM_ORDER, nextRoom } from './types';
-import { isMusicOn, startMusic, stopMusic } from './lib/audio';
+import { Room, ROOM_ORDER, nextRoom, prevRoom } from './types';
+import { isMusicOn, startMusic, stopMusic, subscribeMusic } from './lib/audio';
+import {
+  CheckoutStage,
+  ParcelState,
+  clearProgress,
+  defaultProgress,
+  loadProgress,
+  roomFromLocation,
+  roomUrl,
+  saveProgress,
+} from './lib/progress';
 import RoomWindow from './rooms/RoomWindow';
 import RoomTag from './rooms/RoomTag';
 import RoomAisle from './rooms/RoomMemoryAisle';
@@ -13,31 +23,100 @@ import RoomParcels from './rooms/RoomParcels';
 import RoomCheckout from './rooms/RoomCheckout';
 import RoomFilm from './rooms/RoomFilm';
 
-function initialRoom(): Room {
-  const params = new URLSearchParams(window.location.search);
-  const r = params.get('room') as Room | null;
-  if (r && ROOM_ORDER.includes(r)) return r;
-  if (params.has('open')) return 'tag';
-  return 'window';
+function initialRoom(saved: Room): Room {
+  return roomFromLocation() ?? saved;
 }
 
 export default function App() {
-  const [room, setRoom] = useState<Room>(initialRoom);
-  const [music, setMusic] = useState(false);
+  const boot = useRef(loadProgress());
+  const [room, setRoom] = useState<Room>(() => initialRoom(boot.current.room));
+  const [parcels, setParcels] = useState<ParcelState>(boot.current.parcels);
+  const [checkout, setCheckout] = useState<CheckoutStage>(boot.current.checkout);
+  const [musicUnlocked, setMusicUnlocked] = useState(boot.current.musicUnlocked);
+  const [playing, setPlaying] = useState(() => isMusicOn());
+  const [pausedRoom, setPausedRoom] = useState<Room | null>(
+    boot.current.room !== 'window' ? boot.current.room : null,
+  );
+  const skipHistory = useRef(true);
 
   const roomIndex = ROOM_ORDER.indexOf(room);
+
+  useEffect(() => subscribeMusic(() => setPlaying(isMusicOn())), []);
+
+  useEffect(() => {
+    saveProgress({
+      room,
+      parcels,
+      checkout,
+      musicUnlocked,
+    });
+  }, [room, parcels, checkout, musicUnlocked]);
+
+  useEffect(() => {
+    if (skipHistory.current) {
+      skipHistory.current = false;
+      window.history.replaceState({ room }, '', roomUrl(room));
+      return;
+    }
+    window.history.pushState({ room }, '', roomUrl(room));
+  }, [room]);
+
+  useEffect(() => {
+    const onPop = (e: PopStateEvent) => {
+      const fromState = (e.state as { room?: Room } | null)?.room;
+      const fromUrl = roomFromLocation();
+      const next = fromState && ROOM_ORDER.includes(fromState) ? fromState : fromUrl;
+      if (next) {
+        skipHistory.current = true;
+        setRoom(next);
+      }
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
+  const goTo = (next: Room) => {
+    setRoom(next);
+  };
 
   const goNext = () => {
     setRoom((current) => nextRoom(current) ?? current);
   };
 
+  const goPrev = () => {
+    setRoom((current) => prevRoom(current) ?? current);
+  };
+
+  const startOver = () => {
+    setPausedRoom(room === 'window' ? pausedRoom : room);
+    clearProgress();
+    setParcels(defaultProgress().parcels);
+    setCheckout('receipt');
+    setMusicUnlocked(false);
+    stopMusic();
+    setPlaying(false);
+    goTo('window');
+  };
+
+  const resume = () => {
+    const saved = loadProgress();
+    const target = pausedRoom && pausedRoom !== 'window' ? pausedRoom : saved.room;
+    if (target !== 'window') {
+      setMusicUnlocked(true);
+      goTo(target);
+    }
+  };
+
+  const replay = () => {
+    startOver();
+  };
+
   const toggleMusic = () => {
     if (isMusicOn()) {
       stopMusic();
-      setMusic(false);
     } else {
       startMusic();
-      setMusic(true);
+      setMusicUnlocked(true);
     }
   };
 
@@ -50,6 +129,9 @@ export default function App() {
     [roomIndex],
   );
 
+  const showResume = room === 'window' && !!pausedRoom && pausedRoom !== 'window';
+  const showMusic = musicUnlocked || room !== 'window';
+
   return (
     <div className="shop-app">
       <Background />
@@ -59,15 +141,25 @@ export default function App() {
           <strong>FOR FIRDAOUS</strong>
           <span>from Salmane</span>
         </div>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+        <div className="bar-actions">
           <div className="bags" aria-hidden>
             {bags.map((b, i) => (
               <i key={i} className={`${b.on ? 'on' : ''} ${b.done ? 'done' : ''}`} />
             ))}
           </div>
-          {(music || isMusicOn()) && (
+          {roomIndex > 0 && (
+            <button type="button" className="mute-btn" onClick={goPrev}>
+              Previous
+            </button>
+          )}
+          {room !== 'window' && (
+            <button type="button" className="mute-btn" onClick={startOver}>
+              Start over
+            </button>
+          )}
+          {showMusic && (
             <button type="button" className="mute-btn" onClick={toggleMusic}>
-              {isMusicOn() ? 'Mute' : 'Music'}
+              {playing ? 'Mute music' : 'Play music'}
             </button>
           )}
         </div>
@@ -77,8 +169,11 @@ export default function App() {
         {room === 'window' && (
           <RoomWindow
             key="window"
+            showResume={showResume}
+            onResume={resume}
             onComplete={() => {
-              setMusic(true);
+              setMusicUnlocked(true);
+              setPausedRoom(null);
               goNext();
             }}
           />
@@ -88,16 +183,26 @@ export default function App() {
         {room === 'calc' && <RoomCalc key="calc" onComplete={goNext} />}
         {room === 'mirror' && <RoomMirror key="mirror" onComplete={goNext} />}
         {room === 'map' && <RoomMap key="map" onComplete={goNext} />}
-        {room === 'parcels' && <RoomParcels key="parcels" onComplete={goNext} />}
+        {room === 'parcels' && (
+          <RoomParcels
+            key="parcels"
+            opened={parcels}
+            onOpenedChange={setParcels}
+            onComplete={goNext}
+          />
+        )}
         {room === 'checkout' && (
           <RoomCheckout
             key="checkout"
+            stage={checkout}
+            onStageChange={setCheckout}
             onContinue={goNext}
-            onRestart={() => setRoom('window')}
+            onReplay={replay}
+            onRestart={startOver}
           />
         )}
         {room === 'film' && (
-          <RoomFilm key="film" onRestart={() => setRoom('window')} />
+          <RoomFilm key="film" onReplay={replay} onRestart={startOver} />
         )}
       </AnimatePresence>
     </div>

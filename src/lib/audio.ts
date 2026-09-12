@@ -2,6 +2,18 @@ let ctx: AudioContext | null = null;
 let theme: HTMLAudioElement | null = null;
 let musicOn = false;
 let playToken = 0;
+const listeners = new Set<() => void>();
+
+function notifyMusic() {
+  listeners.forEach((fn) => fn());
+}
+
+export function subscribeMusic(fn: () => void) {
+  listeners.add(fn);
+  return () => {
+    listeners.delete(fn);
+  };
+}
 
 /** cache-bust so browsers don't reuse an old looping audio element behavior */
 const THEME_SRC = `${import.meta.env.BASE_URL || '/'}blow-theme.mp3?v=once2`;
@@ -30,6 +42,7 @@ function ensureTheme() {
         theme.currentTime = 0;
         theme.loop = false;
       }
+      notifyMusic();
     });
   }
   theme.loop = false;
@@ -50,11 +63,14 @@ export function startMusic() {
     if (token !== playToken) return;
     audio.loop = false;
     musicOn = true;
+    notifyMusic();
   }).catch(() => {
     if (token !== playToken) return;
     musicOn = false;
+    notifyMusic();
   });
   musicOn = true;
+  notifyMusic();
 }
 
 export function stopMusic() {
@@ -65,6 +81,7 @@ export function stopMusic() {
     theme.currentTime = 0;
   }
   musicOn = false;
+  notifyMusic();
 }
 
 export function isMusicOn() {

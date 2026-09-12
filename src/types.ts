@@ -27,12 +27,23 @@ export function nextRoom(current: Room): Room | null {
   return ROOM_ORDER[i + 1];
 }
 
+export function prevRoom(current: Room): Room | null {
+  const i = ROOM_ORDER.indexOf(current);
+  if (i <= 0) return null;
+  return ROOM_ORDER[i - 1];
+}
+
 export function normalize(s: string): string {
   return (s || '')
     .toLowerCase()
     .normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9\s]/g, '')
+    .replace(/[\u200b-\u200d\ufeff]/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+export function compactText(s: string): string {
+  return normalize(s).replace(/\s+/g, '');
 }

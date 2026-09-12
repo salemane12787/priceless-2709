@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { motion } from 'framer-motion';
-import { normalize } from '../types';
+import { compactText } from '../types';
 import { burst } from '../lib/confetti';
 import { chime } from '../lib/audio';
 
@@ -18,7 +18,7 @@ export default function RoomMirror({ onComplete }: Props) {
   const submit = (e: FormEvent) => {
     e.preventDefault();
     if (clear) return;
-    const v = normalize(value);
+    const v = compactText(value);
     if (v.includes('salmane') || v.includes('salman')) {
       setClear(true);
       setReact('There you go.');

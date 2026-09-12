@@ -12,6 +12,17 @@ export default function RoomTag({ onComplete }: Props) {
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const start = useRef<{ x: number; y: number } | null>(null);
 
+  const done = useRef(false);
+
+  const rip = () => {
+    if (done.current) return;
+    done.current = true;
+    setRipped(true);
+    burst();
+    chime();
+    window.setTimeout(onComplete, 1100);
+  };
+
   const onPointerDown = (e: React.PointerEvent) => {
     if (ripped) return;
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
@@ -24,11 +35,8 @@ export default function RoomTag({ onComplete }: Props) {
     const dy = e.clientY - start.current.y;
     setOffset({ x: dx, y: dy });
     if (Math.hypot(dx, dy) > 110) {
-      setRipped(true);
       setOffset({ x: dx * 1.4, y: dy * 1.4 });
-      burst();
-      chime();
-      window.setTimeout(onComplete, 1100);
+      rip();
     }
   };
 
@@ -47,20 +55,23 @@ export default function RoomTag({ onComplete }: Props) {
     >
       <p className="kicker">1 / 7</p>
       <h2>You’re not for sale</h2>
-      <p className="lead">This gift has a fake $999 tag. Drag it off.</p>
+      <p className="lead">This gift has a fake $999 tag. Drag it off, or tap it.</p>
 
       {!ripped ? (
-        <div
+        <button
+          type="button"
           className="price-tag"
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp}
+          onClick={rip}
+          aria-label="Remove the fake price tag"
           style={{ transform: `translate(${offset.x}px, ${offset.y}px) rotate(${offset.x * 0.05}deg)` }}
         >
           <div className="amount">$999</div>
-          <div className="sub">drag this off →</div>
-        </div>
+          <div className="sub">drag or tap →</div>
+        </button>
       ) : (
         <motion.div
           className="revealed-tag"
@@ -71,7 +82,7 @@ export default function RoomTag({ onComplete }: Props) {
         </motion.div>
       )}
 
-      <p className="hint">{ripped ? 'yeah. that’s you.' : 'hold and drag the tag'}</p>
+      <p className="hint">{ripped ? 'yeah. that’s you.' : 'drag the tag, or tap it'}</p>
     </motion.div>
   );
 }

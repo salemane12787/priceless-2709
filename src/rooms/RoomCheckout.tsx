@@ -1,24 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { sideCannons, burst } from '../lib/confetti';
 
 interface Props {
   onContinue?: () => void;
   onRestart?: () => void;
+  onReplay?: () => void;
+  stage: 'receipt' | 'letter';
+  onStageChange: (stage: 'receipt' | 'letter') => void;
 }
 
-export default function RoomCheckout({ onContinue, onRestart }: Props) {
-  const [stage, setStage] = useState<'receipt' | 'letter'>('receipt');
-
+export default function RoomCheckout({ onContinue, onRestart, onReplay, stage, onStageChange }: Props) {
   useEffect(() => {
+    if (stage === 'letter') return;
     sideCannons();
-    const t = window.setTimeout(() => setStage('letter'), 4200);
+    const t = window.setTimeout(() => {
+      onStageChange('letter');
+      burst(true);
+    }, 4200);
     return () => clearTimeout(t);
-  }, []);
-
-  useEffect(() => {
-    if (stage === 'letter') burst(true);
-  }, [stage]);
+  }, [stage, onStageChange]);
 
   return (
     <motion.div
@@ -113,6 +114,11 @@ export default function RoomCheckout({ onContinue, onRestart }: Props) {
             <button type="button" className="ghost-btn" onClick={() => sideCannons()}>
               More confetti
             </button>
+            {onReplay && (
+              <button type="button" className="ghost-btn" onClick={onReplay}>
+                Replay
+              </button>
+            )}
             {onRestart && (
               <button type="button" className="ghost-btn" onClick={onRestart}>
                 Start over

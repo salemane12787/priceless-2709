@@ -4,6 +4,7 @@ import { stopMusic } from '../lib/audio';
 
 interface Props {
   onRestart?: () => void;
+  onReplay?: () => void;
 }
 
 function filmCandidates(): string[] {
@@ -14,7 +15,7 @@ function filmCandidates(): string[] {
   ];
 }
 
-export default function RoomFilm({ onRestart }: Props) {
+export default function RoomFilm({ onRestart, onReplay }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [ready, setReady] = useState(false);
   const [ended, setEnded] = useState(false);
@@ -105,6 +106,11 @@ export default function RoomFilm({ onRestart }: Props) {
         <a className="ghost-btn" href={src} target="_blank" rel="noreferrer" style={{ textAlign: 'center' }}>
           Open film in a new tab
         </a>
+        {onReplay && (
+          <button type="button" className="ghost-btn" onClick={onReplay}>
+            Replay
+          </button>
+        )}
         {onRestart && (
           <button type="button" className="ghost-btn" onClick={onRestart}>
             Start over
