@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { compactText, normalize } from '../types';
 import { burst } from '../lib/confetti';
 import { ParcelState } from '../lib/progress';
+import { CLIP, playClip } from '../lib/roomSounds';
 
 interface Props {
   onComplete: () => void;
@@ -36,6 +37,7 @@ export default function RoomParcels({ onComplete, opened, onOpenedChange }: Prop
     if (choice === 'tiktok') {
       setErr('');
       burst();
+      playClip(CLIP.missme);
       markOpen('miss');
     } else {
       setErr('Nope. Think about how we met.');
@@ -47,6 +49,7 @@ export default function RoomParcels({ onComplete, opened, onOpenedChange }: Prop
     if (holdTimer.current) clearInterval(holdTimer.current);
     setHoldPct(100);
     burst();
+    playClip(CLIP.laugh);
     markOpen('laugh');
   };
 
@@ -84,6 +87,7 @@ export default function RoomParcels({ onComplete, opened, onOpenedChange }: Prop
     if (compact === '27' || v === '27' || v.includes('twenty seven')) {
       setErr('');
       burst();
+      playClip(CLIP.birthday);
       markOpen('bday');
     } else {
       setErr('Wrong day. Hint: your birthday date.');

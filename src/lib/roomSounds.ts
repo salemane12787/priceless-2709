@@ -1,23 +1,33 @@
-import { Room } from '../types';
-
 /**
- * Drop mp3 files in public/sounds/ then add the path here.
- * Example: tag: 'sounds/tag.mp3'
- * Missing files are ignored — nothing extra plays until you add them.
+ * Put your voice mp3s in:  public/sounds/
+ * Exact file names (lowercase):
+ *
+ *   priceless.mp3   — she rips the fake $999 tag
+ *   tiktok.mp3      — she picks “we met on TikTok”
+ *   three.mp3       — she taps 3 (1+1=3)
+ *   salmane.mp3     — she types your name
+ *   distance.mp3    — she pulls the pins closer
+ *   missme.mp3      — “when you miss me” note opens
+ *   laugh.mp3       — “when you need a laugh” note opens
+ *   birthday.mp3    — she types 27
+ *   letter.mp3      — the letter appears
+ *
+ * Missing files are skipped. No need to change code.
  */
-export const ROOM_SOUNDS: Partial<Record<Room, string>> = {
-  // window: already uses blow-theme.mp3 after candles
-  // tag: 'sounds/tag.mp3',
-  // aisle: 'sounds/tiktok.mp3',
-  // calc: 'sounds/three.mp3',
-  // mirror: 'sounds/name.mp3',
-  // map: 'sounds/distance.mp3',
-  // parcels: 'sounds/notes.mp3',
-  // checkout: 'sounds/letter.mp3',
-  // film: film has its own audio
-};
 
 const players = new Map<string, HTMLAudioElement>();
+
+export const CLIP = {
+  priceless: 'sounds/priceless.mp3',
+  tiktok: 'sounds/tiktok.mp3',
+  three: 'sounds/three.mp3',
+  salmane: 'sounds/salmane.mp3',
+  distance: 'sounds/distance.mp3',
+  missme: 'sounds/missme.mp3',
+  laugh: 'sounds/laugh.mp3',
+  birthday: 'sounds/birthday.mp3',
+  letter: 'sounds/letter.mp3',
+} as const;
 
 export function playClip(src: string) {
   const url = `${import.meta.env.BASE_URL || '/'}${src}`;
@@ -30,22 +40,10 @@ export function playClip(src: string) {
   }
   audio.currentTime = 0;
   void audio.play().catch(() => {
-    /* file not there yet, or autoplay blocked */
+    /* file not there yet */
   });
-}
-
-export function playRoomSound(room: Room) {
-  const src = ROOM_SOUNDS[room];
-  if (!src) return;
-  playClip(src);
 }
 
 export function stopRoomSounds() {
-  Object.values(ROOM_SOUNDS).forEach((src) => {
-    if (!src) return;
-    const audio = players.get(src);
-    if (!audio) return;
-    audio.pause();
-    audio.currentTime = 0;
-  });
+  /* one-shot voice clips keep playing into the next screen */
 }

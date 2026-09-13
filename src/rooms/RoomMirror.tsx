@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { compactText } from '../types';
 import { burst } from '../lib/confetti';
 import { chime } from '../lib/audio';
+import { CLIP, playClip } from '../lib/roomSounds';
 
 interface Props {
   onComplete: () => void;
@@ -25,7 +26,8 @@ export default function RoomMirror({ onComplete }: Props) {
       setBad(false);
       burst();
       chime();
-      window.setTimeout(onComplete, 1200);
+      playClip(CLIP.salmane);
+      window.setTimeout(onComplete, 1800);
     } else {
       setReact('Wrong. Hint: starts with S.');
       setBad(true);

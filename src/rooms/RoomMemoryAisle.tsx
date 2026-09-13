@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { burst } from '../lib/confetti';
+import { CLIP, playClip } from '../lib/roomSounds';
 
 interface Props {
   onComplete: () => void;
@@ -45,8 +46,9 @@ export default function RoomAisle({ onComplete }: Props) {
       setReact('Yes. That’s how it started.');
       setBad(false);
       burst();
+      playClip(CLIP.tiktok);
       resetDrag();
-      window.setTimeout(onComplete, 1000);
+      window.setTimeout(onComplete, 1800);
       return;
     }
     setReact(product.joke);

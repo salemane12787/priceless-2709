@@ -1,0 +1,13 @@
+PUT YOUR VOICE MP3s HERE. Same names, all lowercase:
+
+priceless.mp3   = she rips the fake price
+tiktok.mp3      = she picks TikTok
+three.mp3       = she taps 3
+salmane.mp3     = she types your name
+distance.mp3    = she moves the pins closer
+missme.mp3      = miss-me note opens
+laugh.mp3       = laugh note opens
+birthday.mp3    = she types 27
+letter.mp3      = the letter shows
+
+Example: record "yeah us" then save as three.mp3 in this folder.

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { sideCannons, burst } from '../lib/confetti';
 import { LETTER_PARAS } from '../lib/letter';
 import { downloadKeepsakePng } from '../lib/keepsake';
+import { CLIP, playClip } from '../lib/roomSounds';
 
 interface Props {
   onContinue?: () => void;
@@ -14,7 +15,10 @@ interface Props {
 
 export default function RoomCheckout({ onContinue, onRestart, onReplay, stage, onStageChange }: Props) {
   useEffect(() => {
-    if (stage === 'letter') return;
+    if (stage === 'letter') {
+      playClip(CLIP.letter);
+      return;
+    }
     sideCannons();
     const t = window.setTimeout(() => {
       onStageChange('letter');

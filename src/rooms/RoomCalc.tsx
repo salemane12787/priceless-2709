@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { burst } from '../lib/confetti';
-import { playClip } from '../lib/roomSounds';
+import { playClip, CLIP } from '../lib/roomSounds';
 
 interface Props {
   onComplete: () => void;
@@ -22,7 +22,7 @@ export default function RoomCalc({ onComplete }: Props) {
       setBad(false);
       setDone(true);
       burst(true);
-      playClip('sounds/three.mp3');
+      playClip(CLIP.three);
       window.setTimeout(onComplete, 1800);
       return;
     }

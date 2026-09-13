@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { burst } from '../lib/confetti';
 import { chime } from '../lib/audio';
+import { CLIP, playClip } from '../lib/roomSounds';
 
 interface Props {
   onComplete: () => void;
@@ -20,7 +21,8 @@ export default function RoomTag({ onComplete }: Props) {
     setRipped(true);
     burst();
     chime();
-    window.setTimeout(onComplete, 1100);
+    playClip(CLIP.priceless);
+    window.setTimeout(onComplete, 1800);
   };
 
   const onPointerDown = (e: React.PointerEvent) => {

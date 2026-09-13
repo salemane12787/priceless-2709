@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { burst } from '../lib/confetti';
+import { CLIP, playClip } from '../lib/roomSounds';
 
 interface Props {
   onComplete: () => void;
@@ -42,7 +43,8 @@ export default function RoomMap({ onComplete }: Props) {
     setReact('Closer… but not the same city yet.');
     setDone(true);
     burst();
-    window.setTimeout(onComplete, 1200);
+    playClip(CLIP.distance);
+    window.setTimeout(onComplete, 1800);
   };
 
   const onPointerDown = (e: React.PointerEvent) => {
