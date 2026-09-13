@@ -3,6 +3,7 @@ import { AnimatePresence } from 'framer-motion';
 import Background from './components/Background';
 import { Room, ROOM_ORDER, nextRoom, prevRoom } from './types';
 import { isMusicOn, startMusic, stopMusic, subscribeMusic } from './lib/audio';
+import { playRoomSound, stopRoomSounds } from './lib/roomSounds';
 import {
   CheckoutStage,
   ParcelState,
@@ -42,6 +43,11 @@ export default function App() {
   const roomIndex = ROOM_ORDER.indexOf(room);
 
   useEffect(() => subscribeMusic(() => setPlaying(isMusicOn())), []);
+
+  useEffect(() => {
+    playRoomSound(room);
+    return () => stopRoomSounds();
+  }, [room]);
 
   useEffect(() => {
     saveProgress({
@@ -94,6 +100,7 @@ export default function App() {
     setCheckout('receipt');
     setMusicUnlocked(false);
     stopMusic();
+    stopRoomSounds();
     setPlaying(false);
     goTo('window');
   };

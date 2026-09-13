@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { sideCannons, burst } from '../lib/confetti';
+import { LETTER_PARAS } from '../lib/letter';
+import { downloadKeepsakePng } from '../lib/keepsake';
 
 interface Props {
   onContinue?: () => void;
@@ -86,21 +88,9 @@ export default function RoomCheckout({ onContinue, onRestart, onReplay, stage, o
             animate={{ y: 0, opacity: 1, rotate: 0 }}
           >
             <p>Firdaous,</p>
-            <p>
-              i couldnt give u something in person so i made this instead
-            </p>
-            <p>
-              still think about how weird it is that we met on tiktok and somehow u just stayed. like i wasnt looking for anything and then it was u. and i didnt wanna lose that
-            </p>
-            <p>
-              even with the distance u feel close. the talks the dumb jokes asking where u are for no reason. thats my favorite part of the day honestly. 1+1=3 and im not arguing w that
-            </p>
-            <p>
-              ur my priceless girl. not just as a nickname. i mean it. nothing i could buy would feel like u
-            </p>
-            <p>
-              happy birthday firdaous. i wish i was there to say it to ur face. until then know this: im glad its u. im still here. im not going anywhere
-            </p>
+            {LETTER_PARAS.map((p) => (
+              <p key={p.slice(0, 24)}>{p}</p>
+            ))}
             <p className="sign">Salmane</p>
             <p className="sign-note">written by salmane not a fucking dumb ai</p>
           </motion.article>
@@ -111,6 +101,9 @@ export default function RoomCheckout({ onContinue, onRestart, onReplay, stage, o
                 Watch the film →
               </button>
             )}
+            <button type="button" className="ghost-btn" onClick={() => void downloadKeepsakePng()}>
+              Keep this gift
+            </button>
             <button type="button" className="ghost-btn" onClick={() => sideCannons()}>
               More confetti
             </button>

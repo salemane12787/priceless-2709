@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { stopMusic } from '../lib/audio';
+import { downloadKeepsakePng } from '../lib/keepsake';
 
 interface Props {
   onRestart?: () => void;
@@ -106,6 +107,9 @@ export default function RoomFilm({ onRestart, onReplay }: Props) {
         <a className="ghost-btn" href={src} target="_blank" rel="noreferrer" style={{ textAlign: 'center' }}>
           Open film in a new tab
         </a>
+        <button type="button" className="ghost-btn" onClick={() => void downloadKeepsakePng()}>
+          Keep this gift
+        </button>
         {onReplay && (
           <button type="button" className="ghost-btn" onClick={onReplay}>
             Replay
