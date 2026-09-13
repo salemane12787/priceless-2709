@@ -19,15 +19,13 @@ export const ROOM_SOUNDS: Partial<Record<Room, string>> = {
 
 const players = new Map<string, HTMLAudioElement>();
 
-export function playRoomSound(room: Room) {
-  const src = ROOM_SOUNDS[room];
-  if (!src) return;
+export function playClip(src: string) {
   const url = `${import.meta.env.BASE_URL || '/'}${src}`;
   let audio = players.get(src);
   if (!audio) {
     audio = new Audio(url);
     audio.preload = 'auto';
-    audio.volume = 0.85;
+    audio.volume = 0.9;
     players.set(src, audio);
   }
   audio.currentTime = 0;
@@ -36,8 +34,17 @@ export function playRoomSound(room: Room) {
   });
 }
 
+export function playRoomSound(room: Room) {
+  const src = ROOM_SOUNDS[room];
+  if (!src) return;
+  playClip(src);
+}
+
 export function stopRoomSounds() {
-  players.forEach((audio) => {
+  Object.values(ROOM_SOUNDS).forEach((src) => {
+    if (!src) return;
+    const audio = players.get(src);
+    if (!audio) return;
     audio.pause();
     audio.currentTime = 0;
   });

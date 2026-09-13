@@ -158,7 +158,7 @@ export default function RoomParcels({ onComplete, opened, onOpenedChange }: Prop
                 inputMode="numeric"
                 style={{
                   border: '1px solid var(--line)',
-                  background: '#3a2a36',
+                  background: '#2a1218',
                   color: 'var(--ink)',
                   borderRadius: 12,
                   padding: '10px 12px',

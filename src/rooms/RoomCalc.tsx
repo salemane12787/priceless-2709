@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { burst } from '../lib/confetti';
-import { chime } from '../lib/audio';
+import { playClip } from '../lib/roomSounds';
 
 interface Props {
   onComplete: () => void;
@@ -22,8 +22,8 @@ export default function RoomCalc({ onComplete }: Props) {
       setBad(false);
       setDone(true);
       burst(true);
-      chime();
-      window.setTimeout(onComplete, 1100);
+      playClip('sounds/three.mp3');
+      window.setTimeout(onComplete, 1800);
       return;
     }
     setScreen(`1 + 1 = ${n} ???`);

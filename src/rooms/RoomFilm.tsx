@@ -108,7 +108,7 @@ export default function RoomFilm({ onRestart, onReplay }: Props) {
           Open film in a new tab
         </a>
         <button type="button" className="ghost-btn" onClick={() => void downloadKeepsakePng()}>
-          Keep this gift
+          Save for memories
         </button>
         {onReplay && (
           <button type="button" className="ghost-btn" onClick={onReplay}>

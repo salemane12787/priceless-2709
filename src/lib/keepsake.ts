@@ -86,12 +86,12 @@ export async function downloadKeepsakePng() {
   }
 
   const bg = ctx.createLinearGradient(0, 0, 0, h);
-  bg.addColorStop(0, '#2a1824');
-  bg.addColorStop(1, '#1a0f18');
+  bg.addColorStop(0, '#3b0d14');
+  bg.addColorStop(1, '#1a090c');
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, w, h);
 
-  ctx.fillStyle = '#d4a574';
+  ctx.fillStyle = '#f4c430';
   ctx.font = '700 28px Nunito, sans-serif';
   ctx.fillText('FOR FIRDAOUS', 80, 110);
   ctx.fillStyle = '#c4a99a';

@@ -4,7 +4,7 @@ function reducedMotion() {
   return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 }
 
-const colors = ['#d4a574', '#f0d5b8', '#c4787a', '#fff6ea', '#8b5a6b'];
+const colors = ['#c8102e', '#f4c430', '#004d98', '#fff6ea', '#ffe58a'];
 
 export function burst(big = false) {
   if (reducedMotion()) return;
@@ -34,7 +34,7 @@ export function burst(big = false) {
 export function sideCannons() {
   if (reducedMotion()) return;
   const end = Date.now() + 700;
-  const palette = ['#d4a574', '#f0d5b8', '#c4787a', '#fff6ea'];
+  const palette = ['#c8102e', '#f4c430', '#004d98', '#fff6ea'];
   (function frame() {
     confetti({
       particleCount: 3,

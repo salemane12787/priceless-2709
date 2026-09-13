@@ -102,7 +102,7 @@ export default function RoomCheckout({ onContinue, onRestart, onReplay, stage, o
               </button>
             )}
             <button type="button" className="ghost-btn" onClick={() => void downloadKeepsakePng()}>
-              Keep this gift
+              Save for memories
             </button>
             <button type="button" className="ghost-btn" onClick={() => sideCannons()}>
               More confetti

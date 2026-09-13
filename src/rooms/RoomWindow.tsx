@@ -133,7 +133,7 @@ export default function RoomWindow({ onComplete, showResume, onResume }: Props) 
       exit={{ opacity: 0, y: -16 }}
     >
       <p className="kicker">27 · 09 · 2026</p>
-      <h1>Happy birthday<br /><span style={{ color: 'var(--coral, #ff7a6b)' }}>Firdaous</span></h1>
+      <h1>Happy birthday<br /><span style={{ color: 'var(--rose)' }}>Firdaous</span></h1>
       <p className="lead">I made you something. Blow the candles to open it.</p>
 
       <div className={`cake ${blown ? 'blown' : ''} ${wind ? 'wind' : ''}`} aria-hidden>
