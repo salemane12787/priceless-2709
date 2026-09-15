@@ -5,3 +5,7 @@ preview/
 *.local
 .env
 .env.*
+api/data/*.sqlite
+api/uploads/*
+!api/uploads/.gitkeep
+src/New Text Document.txt
