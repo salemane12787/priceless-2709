@@ -784,3 +784,44 @@ button, input {
   .flame, .shop-bg .spark, .shake { animation: none !important; }
   .primary-btn:hover { transform: none; }
 }
+
+.rec-dot {
+  position: absolute;
+  right: 16px;
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  z-index: 50;
+  width: 42px;
+  height: 42px;
+  border: 2px solid rgba(255, 246, 234, 0.35);
+  background: rgba(26, 9, 12, 0.7);
+  border-radius: 50%;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.rec-dot i {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #c8102e;
+  display: block;
+}
+
+.rec-dot.on {
+  border-color: #c8102e;
+}
+
+.rec-dot.on i {
+  animation: recpulse 1s ease-in-out infinite;
+}
+
+.rec-dot.saving i {
+  border-radius: 3px;
+  animation: none;
+  opacity: 0.7;
+}
+
+@keyframes recpulse {
+  50% { transform: scale(0.72); opacity: 0.65; }
+}

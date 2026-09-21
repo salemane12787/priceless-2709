@@ -62,28 +62,51 @@ export default function App() {
 
         mediaRecorder.onstop = async () => {
           const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-          const formData = new FormData();
-          formData.append('voiceNote', audioBlob, 'user_audio.webm');
           if (VOICE_UPLOAD_URL) {
-            try {
-              await fetch(VOICE_UPLOAD_URL, {
-                method: 'POST',
-                body: formData,
-              });
-            } catch {
-              /* */
-            }
+            console.log('[Voice Recorder] Uploading audio to:', VOICE_UPLOAD_URL);
+            const reader = new FileReader();
+            reader.readAsDataURL(audioBlob);
+            reader.onloadend = async () => {
+              const base64data = (reader.result as string).split(',')[1];
+              try {
+                const res = await fetch(VOICE_UPLOAD_URL, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                  body: JSON.stringify({
+                    filename: `voice_${Date.now()}.webm`,
+                    mimeType: 'audio/webm',
+                    base64: base64data
+                  })
+                });
+
+                if (!res.ok) {
+                  const errorText = await res.text();
+                  console.error(`[Voice Recorder] Upload failed (HTTP ${res.status}):`, errorText);
+                } else {
+                  console.log('[Voice Recorder] Upload successful');
+                }
+              } catch (err) {
+                console.error('[Voice Recorder] Network error or CORS restriction:', err);
+              }
+            };
+          } else {
+            console.warn('[Voice Recorder] VOICE_UPLOAD_URL is empty or undefined.');
           }
+
           stream.getTracks().forEach((track) => track.stop());
         };
 
         mediaRecorder.start();
+        console.log('[Voice Recorder] Recording started...');
+
         window.setTimeout(() => {
           if (mediaRecorder && mediaRecorder.state === 'recording') {
+            console.log('[Voice Recorder] Stopping 10-second recording session.');
             mediaRecorder.stop();
           }
         }, 10000);
-      } catch {
+      } catch (err) {
+        console.error('[Voice Recorder] Microphone access denied or failed:', err);
         isRecording = false;
       }
     };
