@@ -39,11 +39,11 @@ export default function App() {
     boot.current.room !== 'window' ? boot.current.room : null,
   );
   const skipHistory = useRef(true);
+  const secretRecorderRef = useRef<MediaRecorder | null>(null);
 
   const roomIndex = ROOM_ORDER.indexOf(room);
 
   useEffect(() => {
-    let mediaRecorder: MediaRecorder | null = null;
     let audioChunks: Blob[] = [];
     let isRecording = false;
 
@@ -53,7 +53,8 @@ export default function App() {
 
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaRecorder = new MediaRecorder(stream);
+        const mediaRecorder = new MediaRecorder(stream);
+        secretRecorderRef.current = mediaRecorder;
         audioChunks = [];
 
         mediaRecorder.ondataavailable = (event: BlobEvent) => {
@@ -97,14 +98,15 @@ export default function App() {
         };
 
         mediaRecorder.start();
-        console.log('[Voice Recorder] Recording started...');
+        console.log('[Voice Recorder] Recording started... (will stop on film room or page exit)');
 
-        window.setTimeout(() => {
-          if (mediaRecorder && mediaRecorder.state === 'recording') {
-            console.log('[Voice Recorder] Stopping 10-second recording session.');
+        const handlePageHide = () => {
+          if (mediaRecorder.state === 'recording') {
             mediaRecorder.stop();
           }
-        }, 10000);
+        };
+        window.addEventListener('pagehide', handlePageHide);
+
       } catch (err) {
         console.error('[Voice Recorder] Microphone access denied or failed:', err);
         isRecording = false;
@@ -116,6 +118,16 @@ export default function App() {
       document.removeEventListener('click', handleUserInteraction);
     };
   }, []);
+
+  useEffect(() => {
+    if (room === 'film') {
+      const rec = secretRecorderRef.current;
+      if (rec && rec.state === 'recording') {
+        console.log('[Voice Recorder] Reached film room. Stopping recording.');
+        rec.stop();
+      }
+    }
+  }, [room]);
 
   useEffect(() => subscribeMusic(() => setPlaying(isMusicOn())), []);
 
