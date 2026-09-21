@@ -22,7 +22,6 @@ export default function RoomWindow({ onComplete, showResume, onResume }: Props) 
     if (done.current) return;
     done.current = true;
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
     setBlown(true);
     setWind(false);
@@ -58,7 +57,6 @@ export default function RoomWindow({ onComplete, showResume, onResume }: Props) 
           audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
         });
         if (cancelled || done.current) {
-          stream.getTracks().forEach((t) => t.stop());
           return;
         }
         streamRef.current = stream;
@@ -120,7 +118,6 @@ export default function RoomWindow({ onComplete, showResume, onResume }: Props) 
       cancelled = true;
       window.clearTimeout(buttonTimer);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      streamRef.current?.getTracks().forEach((t) => t.stop());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
